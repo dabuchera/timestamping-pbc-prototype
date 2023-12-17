@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 
 export function Header() {
   return (
-    <div className="flex">
+    <div className="flex mb-10">
       <div className="flex-1">
         <NavigationMenu className="py-5 px-5">
           <NavigationMenuList>
@@ -23,8 +23,13 @@ export function Header() {
               </a>
             </NavigationMenuLink>
             <NavigationMenuItem className="pl-5">
-              <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Documentation</NavigationMenuLink>
+              <Link href="/contracts" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Contracts</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/dashboard" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Dashboard</NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
