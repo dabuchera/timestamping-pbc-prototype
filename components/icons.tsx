@@ -1,8 +1,34 @@
 import {
-    AlertTriangle, ArrowRight, Check, ChevronLeft, ChevronRight, Command, CreditCard, File,
-    FileText, HelpCircle, Image, Laptop, Loader2, Moon, MoreVertical, Pizza, Plus, Settings,
-    SunMedium, Trash, Twitter, User, X
-} from 'lucide-react';
+  AlarmClockCheck,
+  AlertTriangle,
+  ArrowRight,
+  Calculator,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardList,
+  Command,
+  CreditCard,
+  Database,
+  File,
+  FileCog,
+  FileText,
+  HelpCircle,
+  Image,
+  Laptop,
+  LayoutTemplate,
+  Loader2,
+  Moon,
+  MoreVertical,
+  Pizza,
+  Plus,
+  Settings,
+  SunMedium,
+  Trash,
+  Twitter,
+  User,
+  X,
+} from 'lucide-react'
 
 export const Icons = {
   logo: Command,
@@ -14,7 +40,6 @@ export const Icons = {
   post: FileText,
   page: File,
   media: Image,
-  settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,
   add: Plus,
@@ -28,4 +53,11 @@ export const Icons = {
   laptop: Laptop,
   twitter: Twitter,
   check: Check,
+  timestamping: AlarmClockCheck,
+  // Dashboard Nav
+  templates: LayoutTemplate,
+  datasets: Database,
+  contracts: FileCog,
+  results: Calculator,
+  settings: Settings,
 }

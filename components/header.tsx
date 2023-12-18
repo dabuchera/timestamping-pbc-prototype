@@ -22,11 +22,6 @@ export function Header() {
                 <HomeIcon size={24} />
               </a>
             </NavigationMenuLink>
-            <NavigationMenuItem className="pl-5">
-              <Link href="/contracts" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Contracts</NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/dashboard" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Dashboard</NavigationMenuLink>
@@ -38,8 +33,8 @@ export function Header() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/testing" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Test</NavigationMenuLink>
+              <Link href="/various" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>Various</NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
