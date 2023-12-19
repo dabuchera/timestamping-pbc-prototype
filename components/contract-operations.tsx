@@ -1,32 +1,22 @@
 "use client"
 
-import * as React from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Contract } from "@prisma/client"
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
+import { Icons } from '@/components/icons';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { toast } from "@/components/ui/use-toast"
-import { Icons } from "@/components/icons"
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { toast } from '@/components/ui/use-toast';
+import { Contract } from '@prisma/client';
 
 async function deletePost(postId: string) {
-  const response = await fetch(`/api/posts/${postId}`, {
+  const response = await fetch(`/api/contracts/${postId}`, {
     method: "DELETE",
   })
 
@@ -41,11 +31,11 @@ async function deletePost(postId: string) {
   return true
 }
 
-interface PostOperationsProps {
-  post: Pick<Contract, "id" | "title">
+interface ContractOperationsProps {
+  contract: Pick<Contract, "id" | "title">
 }
 
-export function PostOperations({ post }: PostOperationsProps) {
+export function ContractOperations({ contract }: ContractOperationsProps) {
   const router = useRouter()
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false)
@@ -59,7 +49,7 @@ export function PostOperations({ post }: PostOperationsProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
-            <Link href={`/editor/${post.id}`} className="flex w-full">
+            <Link href={`/dashboard/contracts/editor/${contract.id}`} className="flex w-full">
               Edit
             </Link>
           </DropdownMenuItem>
@@ -89,7 +79,7 @@ export function PostOperations({ post }: PostOperationsProps) {
                 event.preventDefault()
                 setIsDeleteLoading(true)
 
-                const deleted = await deletePost(post.id)
+                const deleted = await deletePost(contract.id)
 
                 if (deleted) {
                   setIsDeleteLoading(false)

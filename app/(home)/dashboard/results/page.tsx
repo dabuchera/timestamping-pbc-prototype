@@ -1,9 +1,9 @@
-import { DashboardHeader } from '@/components/dashboard-header'
-import { EmptyPlaceholder } from '@/components/empty-placeholder'
-import { ContractCreateButton } from '@/components/contract-create-button'
-import { ContractItem } from '@/components/contract-item'
-import { DashboardShell } from '@/components/shell'
-import { db } from '@/lib/db'
+import { ContractCreateButton } from '@/components/contract-create-button';
+import { ContractItem } from '@/components/contract-item';
+import { DashboardHeader } from '@/components/dashboard-header';
+import { EmptyPlaceholder } from '@/components/empty-placeholder';
+import { DashboardShell } from '@/components/shell';
+import { db } from '@/lib/db';
 
 export const metadata = {
   title: 'Results',
@@ -14,7 +14,7 @@ export default async function IndexPage() {
 //     select: {
 //       id: true,
 //       title: true,
-//       published: true,
+//       timestamped: true,
 //       createdAt: true,
 //     },
 //     orderBy: {

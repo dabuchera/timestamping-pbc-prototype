@@ -1,12 +1,12 @@
 "use client"
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
-import { cn } from "@/lib/utils"
-import { ButtonProps, buttonVariants } from "@/components/ui/button"
-import { toast } from "@/components/ui/use-toast"
-import { Icons } from "@/components/icons"
+import { Icons } from '@/components/icons';
+import { ButtonProps, buttonVariants } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
+import { cn } from '@/lib/utils';
 
 interface ContractCreateButtonProps extends ButtonProps {}
 
@@ -21,40 +21,32 @@ export function ContractCreateButton({
   async function onClick() {
     setIsLoading(true)
 
-    const response = await fetch("/api/posts", {
+    const response = await fetch("/api/contracts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: "Untitled Post",
+        title: "Untitled Contract",
       }),
     })
 
     setIsLoading(false)
 
     if (!response?.ok) {
-      if (response.status === 402) {
-        return toast({
-          title: "Limit of 3 posts reached.",
-          description: "Please upgrade to the PRO plan.",
-          variant: "destructive",
-        })
-      }
-
-      return toast({
+            return toast({
         title: "Something went wrong.",
         description: "Your contract was not created. Please try again.",
         variant: "destructive",
       })
     }
 
-    const post = await response.json()
+    const contract = await response.json()
 
     // This forces a cache invalidation.
     router.refresh()
 
-    router.push(`/editor/${post.id}`)
+    router.push(`/dashboard/contracts/editor/${contract.id}`)
   }
 
   return (

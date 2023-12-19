@@ -1,12 +1,12 @@
-import Link from "next/link"
-import { Contract } from "@prisma/client"
+import Link from 'next/link';
 
-import { formatDate } from "@/lib/utils"
-import { Skeleton } from "@/components/ui/skeleton"
-import { PostOperations } from "@/components/post-operations"
+import { ContractOperations } from '@/components/contract-operations';
+import { Skeleton } from '@/components/ui/skeleton';
+import { formatDate } from '@/lib/utils';
+import { Contract } from '@prisma/client';
 
 interface ContractItemProps {
-  contract: Pick<Contract, "id" | "title" | "published" | "createdAt">
+  contract: Pick<Contract, "id" | "title" | "timestamped" | "createdAt">
 }
 
 export function ContractItem({ contract }: ContractItemProps) {
@@ -14,7 +14,7 @@ export function ContractItem({ contract }: ContractItemProps) {
     <div className="flex items-center justify-between p-4">
       <div className="grid gap-1">
         <Link
-          href={`/editor/${contract.id}`}
+          href={`/dashboard/contracts/editor/${contract.id}`}
           className="font-semibold hover:underline"
         >
           {contract.title}
@@ -25,7 +25,7 @@ export function ContractItem({ contract }: ContractItemProps) {
           </p>
         </div>
       </div>
-      <PostOperations post={{ id: contract.id, title: contract.title }} />
+      <ContractOperations contract={{ id: contract.id, title: contract.title }} />
     </div>
   )
 }

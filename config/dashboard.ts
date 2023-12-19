@@ -1,4 +1,4 @@
-import { DashboardConfig } from '@/types'
+import { DashboardConfig } from '@/types';
 
 export const dashboardConfig: DashboardConfig = {
   mainNav: [
@@ -15,7 +15,7 @@ export const dashboardConfig: DashboardConfig = {
   sidebarNav: [
     {
       title: 'Templates',
-      href: '/dashboard/contract-templates',
+      href: '/dashboard/templates',
       icon: 'templates',
     },
     {
@@ -25,7 +25,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: 'Contracts',
-      href: '/dashboard/performance-contracts',
+      href: '/dashboard/contracts',
       icon: 'contracts',
     },
     {
@@ -33,10 +33,10 @@ export const dashboardConfig: DashboardConfig = {
       href: '/dashboard/results',
       icon: 'results',
     },
-    {
-      title: 'Settings',
-      href: '/dashboard/settings',
-      icon: 'settings',
-    },
+    // {
+    //   title: 'Settings',
+    //   href: '/dashboard/settings',
+    //   icon: 'settings',
+    // },
   ],
 }

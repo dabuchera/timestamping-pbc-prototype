@@ -1,33 +1,33 @@
-import { DashboardHeader } from '@/components/dashboard-header'
-import { EmptyPlaceholder } from '@/components/empty-placeholder'
-import { ContractCreateButton } from '@/components/contract-create-button'
-import { ContractItem } from '@/components/contract-item'
-import { DashboardShell } from '@/components/shell'
-import { db } from '@/lib/db'
+import { ContractCreateButton } from '@/components/contract-create-button';
+import { ContractItem } from '@/components/contract-item';
+import { DashboardHeader } from '@/components/dashboard-header';
+import { EmptyPlaceholder } from '@/components/empty-placeholder';
+import { DashboardShell } from '@/components/shell';
+import { db } from '@/lib/db';
 
 export const metadata = {
-  title: 'Templates',
+  title: 'Contracts',
 }
 
 export default async function IndexPage() {
-//   const contracts = await db.contract.findMany({
-//     select: {
-//       id: true,
-//       title: true,
-//       published: true,
-//       createdAt: true,
-//     },
-//     orderBy: {
-//       updatedAt: 'desc',
-//     },
-//   })
+  const contracts = await db.contract.findMany({
+    select: {
+      id: true,
+      title: true,
+      timestamped: true,
+      createdAt: true,
+    },
+    orderBy: {
+      updatedAt: 'desc',
+    },
+  })
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Templates" text="Create and manage templates.">
-        {/* <ContractCreateButton /> */}
+      <DashboardHeader heading="Contracts" text="Create and manage contracts.">
+        <ContractCreateButton />
       </DashboardHeader>
-      {/* <div>
+      <div>
         {contracts?.length ? (
           <div className="divide-y divide-border rounded-md border">
             {contracts.map((contract) => (
@@ -42,7 +42,7 @@ export default async function IndexPage() {
             <ContractCreateButton variant="outline" />
           </EmptyPlaceholder>
         )}
-      </div> */}
+      </div>
     </DashboardShell>
   )
 }
