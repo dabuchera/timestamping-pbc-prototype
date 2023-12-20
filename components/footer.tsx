@@ -14,37 +14,24 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           {/* <Icons.logo /> */}
           <p className="text-center text-sm leading-loose md:text-left">
-            Built by{" "}
-            <a
-              href={""}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
+            Built by{' '}
+            <a href={''} target="_blank" rel="noreferrer" className="font-medium underline underline-offset-4">
               dabuchera & hujens
             </a>
-            . Hosted on{" "}
-            <a
-              href="https://vercel.com"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
+            . Hosted on{' '}
+            <a href="https://vercel.com" target="_blank" rel="noreferrer" className="font-medium underline underline-offset-4">
               Vercel
             </a>
-            . The source code is available on{" "}
-            <a
-              href={"https://github.com/dabuchera"}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
+            . The source code is available on{' '}
+            <a href={'https://github.com/dabuchera'} target="_blank" rel="noreferrer" className="font-medium underline underline-offset-4">
               GitHub
             </a>
             .
           </p>
         </div>
+
         {<ModeToggle />}
+        
       </div>
     </footer>
   )

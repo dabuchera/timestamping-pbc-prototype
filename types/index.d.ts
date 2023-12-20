@@ -31,3 +31,12 @@ export type DashboardConfig = {
   mainNav: MainNavItem[]
   sidebarNav: SidebarNavItem[]
 }
+
+export type MyJsonObject = {
+  id: number;
+  name: string;
+  attributes: {
+      type: string;
+      valid: boolean;
+  };
+}

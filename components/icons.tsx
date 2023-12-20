@@ -1,14 +1,15 @@
 import {
     AlarmClockCheck, AlertTriangle, ArrowRight, Calculator, Check, ChevronLeft, ChevronRight,
-    Command, CreditCard, Database, File, FileCog, FileText, HelpCircle, Image, Laptop,
-    LayoutTemplate, Loader2, Moon, MoreVertical, Pizza, Plus, Settings, SunMedium, Trash, Twitter,
-    User, X
+    Command, CreditCard, Database, File, FileCog, FileText, HelpCircle, Hourglass, Image, Info,
+    Laptop, LayoutTemplate, Loader, Loader2, Moon, MoreVertical, Pizza, Plus, Settings, SunMedium,
+    Timer, TimerOff, Trash, Twitter, User, X
 } from 'lucide-react';
 
 export const Icons = {
   logo: Command,
   close: X,
   spinner: Loader2,
+  loader: Loader,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   trash: Trash,
@@ -35,4 +36,8 @@ export const Icons = {
   contracts: FileCog,
   results: Calculator,
   settings: Settings,
+  // Timestamping info
+  timestamped: Timer,
+  nottimestamped: TimerOff,
+  info: Info,
 }

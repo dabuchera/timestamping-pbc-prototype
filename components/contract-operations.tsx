@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -15,16 +15,18 @@ import {
 import { toast } from '@/components/ui/use-toast';
 import { Contract } from '@prisma/client';
 
+import { ContractTimestampingButton } from './contract-timestamping-button';
+
 async function deletePost(postId: string) {
   const response = await fetch(`/api/contracts/${postId}`, {
-    method: "DELETE",
+    method: 'DELETE',
   })
 
   if (!response?.ok) {
     toast({
-      title: "Something went wrong.",
-      description: "Your post was not deleted. Please try again.",
-      variant: "destructive",
+      title: 'Something went wrong.',
+      description: 'Your post was not deleted. Please try again.',
+      variant: 'destructive',
     })
   }
 
@@ -32,7 +34,7 @@ async function deletePost(postId: string) {
 }
 
 interface ContractOperationsProps {
-  contract: Pick<Contract, "id" | "title">
+  contract: Pick<Contract, 'id' | 'title'>
 }
 
 export function ContractOperations({ contract }: ContractOperationsProps) {
@@ -41,7 +43,8 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false)
 
   return (
-    <>
+    <div className='flex gap-4'>
+      <ContractTimestampingButton />
       <DropdownMenu>
         <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-muted">
           <Icons.ellipsis className="h-4 w-4" />
@@ -65,12 +68,8 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you sure you want to delete this post?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone.
-            </AlertDialogDescription>
+            <AlertDialogTitle>Are you sure you want to delete this post?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -89,16 +88,12 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
               }}
               className="bg-red-600 focus:ring-red-600"
             >
-              {isDeleteLoading ? (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Icons.trash className="mr-2 h-4 w-4" />
-              )}
+              {isDeleteLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : <Icons.trash className="mr-2 h-4 w-4" />}
               <span>Delete</span>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </>
+    </div>
   )
 }
