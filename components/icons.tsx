@@ -2,7 +2,7 @@ import {
     AlarmClockCheck, AlertTriangle, ArrowRight, Calculator, Check, ChevronLeft, ChevronRight,
     Command, CreditCard, Database, File, FileCog, FileText, HelpCircle, Hourglass, Image, Info,
     Laptop, LayoutTemplate, Loader, Loader2, Moon, MoreVertical, Pizza, Plus, Settings, SunMedium,
-    Timer, TimerOff, Trash, Twitter, User, X
+    Timer, TimerOff, Trash, Twitter, User, X, XOctagon
 } from 'lucide-react';
 
 export const Icons = {
@@ -17,7 +17,6 @@ export const Icons = {
   page: File,
   media: Image,
   billing: CreditCard,
-  ellipsis: MoreVertical,
   add: Plus,
   warning: AlertTriangle,
   user: User,
@@ -30,6 +29,9 @@ export const Icons = {
   twitter: Twitter,
   check: Check,
   timestamping: AlarmClockCheck,
+  // Contract Operations
+  ellipsis: MoreVertical,
+  disabled: XOctagon,
   // Dashboard Nav
   templates: LayoutTemplate,
   datasets: Database,

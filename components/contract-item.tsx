@@ -15,17 +15,17 @@ import { ContractTimestampingButton } from './contract-timestamping-button';
 import { Icons } from './icons';
 
 interface ContractItemProps {
-  contract: Pick<Contract, 'id' | 'title' | 'createdAt'>
+  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'createdAt'>
 }
 
 export function ContractItem({ contract }: ContractItemProps) {
   // const status = getStatus(contract.digest)
 
-  let testDigest = { digest: 'bdf6bc93bfdaaa44b3753351d10d2be6a59002cedb2809c3ffec62ca700a7df0', result: 1 }
+  // let testDigest = { digest: 'bdf6bc93bfdaaa44b3753351d10d2be6a59002cedb2809c3ffec62ca700a7df0', result: 1 }
 
-  const status = getStatus(testDigest)
+  // const status = getStatus(testDigest)
 
-  console.log("ContractItem")
+  console.log('ContractItem')
 
   // useEffect(() => {
   //   const fetch = async () => {
@@ -42,7 +42,7 @@ export function ContractItem({ contract }: ContractItemProps) {
 
   return (
     <div className="flex items-center justify-between p-4">
-      <div className="flex items-center gap-20">
+      <div className="flex items-center gap-20 w-1/2">
         <div className="grid gap-1">
           <Link href={`/dashboard/contracts/editor/${contract.id}`} className="font-semibold hover:underline">
             {contract.title}
@@ -51,11 +51,17 @@ export function ContractItem({ contract }: ContractItemProps) {
             <p className="text-sm text-muted-foreground">{formatDate(contract.createdAt?.toDateString())}</p>
           </div>
         </div>
-        {/* <ContractStatus contract={{ id: contract.id }} /> */}
       </div>
       <div className="flex gap-4">
-        <ContractTimestampingButton contract={{ id: contract.id, title: contract.title }} />
-        <ContractOperations contract={{ id: contract.id, title: contract.title }} />
+        <ContractStatus contract={{ id: contract.id, digest: contract.digest }} />
+      </div>
+      <div className="flex gap-4">
+        <ContractTimestampingButton
+          contract={{ id: contract.id, title: contract.title }}
+          // Button is disabled if contract.digest has a value
+          disabled={!!contract.digest}
+        />
+        <ContractOperations contract={{ id: contract.id, digest: contract.digest, title: contract.title }} />
       </div>
     </div>
   )

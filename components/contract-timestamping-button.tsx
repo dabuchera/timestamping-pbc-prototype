@@ -6,11 +6,8 @@ import * as React from 'react';
 import { Icons } from '@/components/icons';
 import { ButtonProps, buttonVariants } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
-import {
-    Digest, handleGetStatus, handleTimestamp, handleVerify, isDigestAnchored, isDigestAnchorPending,
-    isDigestWaitingAnchoring
-} from '@/lib/dcrtime';
-import { cn, getStatus, processJsonObject } from '@/lib/utils';
+import { handleTimestamp } from '@/lib/dcrtime';
+import { cn, processJsonObject } from '@/lib/utils';
 import { ContractObject } from '@/types';
 import { Contract } from '@prisma/client';
 
@@ -39,7 +36,6 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
 
   async function onClick() {
     setIsLoading(true)
-    console.log('onClick')
     const JsonObject: ContractObject = {
       id: contract.id,
       title: contract.title,
@@ -47,73 +43,36 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
 
     const processedData = await processJsonObject(JsonObject)
 
-    console.log(processedData)
-
-    // const contracts = await handleTimestamp(processedData)
-
     const res = await handleTimestamp(processedData)
     console.log(res)
 
-    const status = getStatus(res.digests[0])
-    console.log(status)
-    // const { digests } = await handleTimestamp(processedData)
+    const response = await fetch(`/api/contracts/${contract.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: contract.title,
+        digest: res.digests[0].digest,
+      }),
+    })
 
-    // console.log()
+    setIsLoading(false)
 
-    // add here store digest to db
-
-    return null
-
-    const digestsInServer = digests.filter(isDigestFound)
-    // fetch verify of digests already in server
-    let verifyRes
-    if (digestsInServer?.length > 0) {
-      verifyRes = await handleVerify(digestsInServer)
+    if (!response?.ok) {
+      return toast({
+        title: 'Something went wrong.',
+        description: 'Your contract was not saved. Please try again.',
+        variant: 'destructive',
+      })
     }
-    let digestsRes = digests
-
-    console.log(processedData)
-    console.log(digestsInServer)
-    console.log(digestsRes)
-
-    // const response = await fetch("/api/contracts", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     title: "Untitled Contract",
-    //   }),
-    // })
-
-    // setIsLoading(false)
-
-    // if (!response?.ok) {
-    //         return toast({
-    //     title: "Something went wrong.",
-    //     description: "Your contract was not created. Please try again.",
-    //     variant: "destructive",
-    //   })
-    // }
-
-    // This forces a cache invalidation.
-    router.refresh()
-  }
-
-  async function onClickStatus() {
-    // const res = await handleGetStatus(contract.id)
-    const res = await handleVerify([
-      { digest: 'e966f1ec9b8ced6e41b3132f63bfc164ff86f5bf2b49ea73feb6254728292852', id: contract.id, payload: 'IlRlc3Qi' },
-    ])
-    console.log(res)
-
-    const status = getStatus(res.digests[0])
-    console.log(status)
 
     // This forces a cache invalidation.
     router.refresh()
 
-
+    return toast({
+      description: 'Your contract has been saved and timestamping started',
+    })
   }
 
   return (
@@ -132,21 +91,6 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
       >
         {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : <Icons.timestamping className="mr-2 h-4 w-4" />}
         Timestamp
-      </button>
-      <button
-        onClick={onClickStatus}
-        className={cn(
-          buttonVariants({ variant }),
-          {
-            'cursor-not-allowed opacity-60': isLoading,
-          },
-          className
-        )}
-        disabled={isLoading}
-        {...props}
-      >
-        <Icons.info className="mr-2 h-4 w-4" />
-        Status
       </button>
     </>
   )

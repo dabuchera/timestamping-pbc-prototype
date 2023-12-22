@@ -34,7 +34,7 @@ async function deletePost(postId: string) {
 }
 
 interface ContractOperationsProps {
-  contract: Pick<Contract, 'id' | 'title'>
+  contract: Pick<Contract, 'id' | 'digest' | 'title'>
 }
 
 export function ContractOperations({ contract }: ContractOperationsProps) {
@@ -46,11 +46,11 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-muted">
-          <Icons.ellipsis className="h-4 w-4" />
+         <Icons.ellipsis className="h-4 w-4" />
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>
+        <DropdownMenuContent className="mt-2" align="end" >
+          <DropdownMenuItem disabled={!!contract.digest}>
             <Link href={`/dashboard/contracts/editor/${contract.id}`} className="flex w-full">
               Edit
             </Link>
@@ -59,6 +59,7 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
           <DropdownMenuItem
             className="flex cursor-pointer items-center text-destructive focus:text-destructive"
             onSelect={() => setShowDeleteAlert(true)}
+            disabled={!!contract.digest}
           >
             Delete
           </DropdownMenuItem>

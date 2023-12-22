@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Contract } from '@prisma/client';
 
 interface EditorProps {
-  contract: Pick<Contract, 'id' | 'title' | 'digest' | 'input1' | 'input2' | 'input3'>
+  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'digest' | 'input1' | 'input2' | 'input3'>
 }
 
 type FormData = z.infer<typeof contractPatchSchema>
@@ -41,9 +41,9 @@ export function Editor({ contract }: EditorProps) {
     // defaultValues werden eigentlich bei creation contract erstellt
     defaultValues: {
       title: contract.title || '',
-      input1: contract.input1,
-      input2: contract.input2,
-      input3: contract.input3,
+      input1: contract.input1 || '',
+      input2: contract.input2 || '',
+      input3: contract.input3 || '',
       // input3: contract.input3 || '',
       // ... any other fields you want to set default values for
     },
@@ -54,7 +54,7 @@ export function Editor({ contract }: EditorProps) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
-    console.log("lkjaskldjakls")
+    console.log('onSubmit')
 
     setIsSaving(true)
 
@@ -89,107 +89,118 @@ export function Editor({ contract }: EditorProps) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid gap-10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-10">
-              <Link
-                href="/dashboard/contracts"
-                onClick={() => {
-                  router.refresh()
-                  router.push('/dashboard/contracts')
-                }}
-                className={cn(buttonVariants({ variant: 'ghost' }))}
-              >
-                <>
-                  <Icons.chevronLeft className="mr-2 h-4 w-4" />
-                  Back
-                </>
-              </Link>
-            </div>
-            <button type="submit" className={cn(buttonVariants())}>
-              {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              <span>Save</span>{' '}
-            </button>
-          </div>
-
-          <div className="prose prose-stone mx-auto w-full dark:prose-invert">
-            {!isStringBlank(contract.digest) ? (
-              <p>
-                <strong>Digest:</strong> {contract.digest}
-              </p>
-            ) : (
-              <p>
-                <strong>Digest:</strong> Not available
-              </p>
-            )}
-          </div>
-
-          <div className="prose prose-stone mx-auto w-full dark:prose-invert">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    {/* Set the default value to the current title, if it exists{} */}
-                    <Input placeholder="Title" {...field} />
-                  </FormControl>
-                  <FormDescription>This is the title of your contract.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="input1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Input 1</FormLabel>
-                  <FormControl>
-                    {/* Set the default value to the current title, if it exists{} */}
-                    <Input placeholder="Input1" {...field} />
-                  </FormControl>
-                  <FormDescription>This is the first input of your contract.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="input2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Input 2</FormLabel>
-                  <FormControl>
-                    {/* Set the default value to the current title, if it exists{} */}
-                    <Input placeholder="Input2" {...field} />
-                  </FormControl>
-                  <FormDescription>This is the second input of your contract.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="input3"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Input 3</FormLabel>
-                  <FormControl>
-                    {/* Set the default value to the current title, if it exists{} */}
-                    <Input placeholder="Input3" {...field} />
-                  </FormControl>
-                  <FormDescription>This is the third input of your contract.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+    <div className="grid gap-10">
+      {/* Back */}
+      <div className="prose prose-stone mx-auto w-full dark:prose-invert">
+        <div className="flex items-center space-x-10">
+          <Link
+            href="/dashboard/contracts"
+            onClick={() => {
+              // This is for the case that Save button not clicked
+              // And if digest set don't submit again when going back
+              // router.push('/dashboard/contracts')
+              if (!!contract.digest) {
+                router.push('/dashboard/contracts')
+              } else {
+                onSubmit
+              }
+            }}
+            className={cn(buttonVariants({ variant: 'ghost' }))}
+          >
+            <>
+              <Icons.chevronLeft className="mr-2 h-4 w-4" />
+              Back
+            </>
+          </Link>
         </div>
-      </form>
-    </Form>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid gap-10">
+            {/* Display the digest or a message if it's null */}
+            <div className="flex items-center justify-between">
+              {!isStringBlank(contract.digest) ? (
+                <p>
+                  <strong>Digest:</strong> {contract.digest}
+                </p>
+              ) : (
+                <p>
+                  <strong>Digest:</strong> Not available
+                </p>
+              )}
+              {/* Save Button */}
+              <button type="submit" className={cn(buttonVariants())} disabled={!!contract.digest}>
+                {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                <span>Save</span>{' '}
+              </button>
+            </div>
+            {/* Form Title */}
+            <div className="prose prose-stone mx-auto w-full dark:prose-invert">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      {/* Set the default value to the current title, if it exists{} */}
+                      <Input placeholder="Title" {...field} disabled={!!contract.digest} />
+                    </FormControl>
+                    <FormDescription>This is the title of your contract.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="input1"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Input 1</FormLabel>
+                    <FormControl>
+                      {/* Set the default value to the current title, if it exists{} */}
+                      <Input placeholder="Input1" {...field} disabled={!!contract.digest} />
+                    </FormControl>
+                    <FormDescription>This is the first input of your contract.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="input2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Input 2</FormLabel>
+                    <FormControl>
+                      {/* Set the default value to the current title, if it exists{} */}
+                      <Input placeholder="Input2" {...field} disabled={!!contract.digest} />
+                    </FormControl>
+                    <FormDescription>This is the second input of your contract.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="input3"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Input 3</FormLabel>
+                    <FormControl>
+                      {/* Set the default value to the current title, if it exists{} */}
+                      <Input placeholder="Input3" {...field} disabled={!!contract.digest} />
+                    </FormControl>
+                    <FormDescription>This is the third input of your contract.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </form>
+      </Form>
+    </div>
   )
 }

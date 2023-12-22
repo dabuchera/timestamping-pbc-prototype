@@ -10,6 +10,9 @@ export const metadata = {
 }
 
 export default async function IndexPage() {
+
+  console.log("IndexPage")
+
   const contracts = await db.contract.findMany({
     select: {
       id: true,

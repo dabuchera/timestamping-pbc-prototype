@@ -39,6 +39,7 @@ export async function handleVerify(data: InputData[]): Promise<DcrtimeResponse> 
   const digests = getDigests(data)
   const id = getId(data)
   // Just take the first element of id array
+  // https://github.com/decred/dcrtimejs?tab=readme-ov-file#verify
   const res = await dcrtime.verify(digests, id[0])
   if (res.error) throw res.error
   return res
