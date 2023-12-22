@@ -18,6 +18,11 @@ export function formatDate(input: string | number): string {
   })
 }
 
+// For checking if a variable is falsey or if the string only contains whitespace or is empty
+export function isStringBlank(str: string | undefined) {
+  return !str || /^\s*$/.test(str)
+}
+
 // Change that to content or a combination of different attributes
 export async function processJsonObject(jsonObject: ContractObject) {
   // Convert JSON object to string

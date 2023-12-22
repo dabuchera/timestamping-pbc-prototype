@@ -38,7 +38,7 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
   // "bdf6bc93bfdaaa44b3753351d10d2be6a59002cedb2809c3ffec62ca700a7df0"
 
   async function onClick() {
-    // setIsLoading(true)
+    setIsLoading(true)
     console.log('onClick')
     const JsonObject: ContractObject = {
       id: contract.id,

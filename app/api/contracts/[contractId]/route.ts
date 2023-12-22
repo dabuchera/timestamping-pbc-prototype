@@ -34,6 +34,7 @@ export async function DELETE(
   }
 }
 
+// Update
 export async function PATCH(
   req: Request,
   context: z.infer<typeof routeContextSchema>
@@ -46,6 +47,8 @@ export async function PATCH(
     const json = await req.json()
     const body = contractPatchSchema.parse(json)
 
+    console.log(body)
+
     // Update the post.
     // TODO: Implement sanitization for content.
     await db.contract.update({
@@ -54,7 +57,10 @@ export async function PATCH(
       },
       data: {
         title: body.title,
-        content: body.content,
+        digest: body.digest,
+        input1: body.input1,
+        input2: body.input2,
+        input3: body.input3,
       },
     })
 

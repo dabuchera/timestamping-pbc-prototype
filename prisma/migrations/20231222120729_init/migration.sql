@@ -1,9 +1,11 @@
 -- CreateTable
 CREATE TABLE `contracts` (
     `id` VARCHAR(191) NOT NULL,
+    `digest` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
-    `content` JSON NULL,
-    `timestamped` BOOLEAN NOT NULL DEFAULT false,
+    `input1` VARCHAR(191) NOT NULL,
+    `input2` VARCHAR(191) NOT NULL,
+    `input3` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 

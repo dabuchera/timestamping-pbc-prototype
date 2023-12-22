@@ -14,7 +14,10 @@ export default async function IndexPage() {
     select: {
       id: true,
       title: true,
-      timestamped: true,
+      digest: true,
+      input1: true,
+      input2: true,
+      input3: true,
       createdAt: true,
     },
     orderBy: {

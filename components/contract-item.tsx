@@ -15,7 +15,7 @@ import { ContractTimestampingButton } from './contract-timestamping-button';
 import { Icons } from './icons';
 
 interface ContractItemProps {
-  contract: Pick<Contract, 'id' | 'title' | 'timestamped' | 'createdAt'>
+  contract: Pick<Contract, 'id' | 'title' | 'createdAt'>
 }
 
 export function ContractItem({ contract }: ContractItemProps) {
@@ -51,7 +51,7 @@ export function ContractItem({ contract }: ContractItemProps) {
             <p className="text-sm text-muted-foreground">{formatDate(contract.createdAt?.toDateString())}</p>
           </div>
         </div>
-        <ContractStatus contract={{ id: contract.id, title: contract.title, timestamped: contract.timestamped }} />
+        {/* <ContractStatus contract={{ id: contract.id }} /> */}
       </div>
       <div className="flex gap-4">
         <ContractTimestampingButton contract={{ id: contract.id, title: contract.title }} />

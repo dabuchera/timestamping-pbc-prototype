@@ -13,15 +13,15 @@ datasource db {
 
 model Contract {
   id          String   @id @default(cuid())
+  digest      String
   title       String
-  content     Json?
-  timestamped Boolean  @default(false)
+  input1      String
+  input2      String
+  input3      String
   createdAt   DateTime @default(now()) @map(name: "created_at")
   updatedAt   DateTime @default(now()) @map(name: "updated_at")
 
   // Timestamp wenn timestamp vorhanden nicht mehr veränderbar
-
-
 
   @@map(name: "contracts")
 }

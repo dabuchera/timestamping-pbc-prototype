@@ -28,6 +28,10 @@ export function ContractCreateButton({
       },
       body: JSON.stringify({
         title: "Untitled Contract",
+        digest: "",
+        input1: "",
+        input2: "",
+        input3: ""
       }),
     })
 

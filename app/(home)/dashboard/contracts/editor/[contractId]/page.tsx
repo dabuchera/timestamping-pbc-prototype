@@ -30,8 +30,10 @@ export default async function EditorPage({ params }: EditorPageProps) {
       contract={{
         id: contract.id,
         title: contract.title,
-        content: contract.content,
-        timestamped: contract.timestamped,
+        digest: contract.digest,
+        input1: contract.input1,
+        input2: contract.input2,
+        input3: contract.input3,
       }}
     />
   )

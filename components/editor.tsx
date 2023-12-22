@@ -16,14 +16,14 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
-import { cn } from '@/lib/utils';
+import { cn, isStringBlank } from '@/lib/utils';
 import { contractPatchSchema } from '@/lib/validations/contract';
 // import EditorJS from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Contract } from '@prisma/client';
 
 interface EditorProps {
-  contract: Pick<Contract, 'id' | 'title' | 'content' | 'timestamped'>
+  contract: Pick<Contract, 'id' | 'title' | 'digest' | 'input1' | 'input2' | 'input3'>
 }
 
 type FormData = z.infer<typeof contractPatchSchema>
@@ -35,14 +35,16 @@ export function Editor({ contract }: EditorProps) {
   const router = useRouter()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
-  console.log(contract)
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof contractPatchSchema>>({
     resolver: zodResolver(contractPatchSchema),
+    // defaultValues werden eigentlich bei creation contract erstellt
     defaultValues: {
       title: contract.title || '',
-      content: contract.content || '',
+      input1: contract.input1,
+      input2: contract.input2,
+      input3: contract.input3,
+      // input3: contract.input3 || '',
       // ... any other fields you want to set default values for
     },
   })
@@ -52,7 +54,9 @@ export function Editor({ contract }: EditorProps) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
-    console.log(values)
+    console.log("lkjaskldjakls")
+
+    setIsSaving(true)
 
     const response = await fetch(`/api/contracts/${contract.id}`, {
       method: 'PATCH',
@@ -61,7 +65,9 @@ export function Editor({ contract }: EditorProps) {
       },
       body: JSON.stringify({
         title: values.title,
-        content: values.content,
+        input1: values.input1,
+        input2: values.input2,
+        input3: values.input3,
       }),
     })
 
@@ -84,30 +90,43 @@ export function Editor({ contract }: EditorProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="grid w-full gap-10">
-          <div className="flex w-full items-center justify-between">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid gap-10">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-10">
-              <Link href="/dashboard/contracts" className={cn(buttonVariants({ variant: 'ghost' }))}>
+              <Link
+                href="/dashboard/contracts"
+                onClick={() => {
+                  router.refresh()
+                  router.push('/dashboard/contracts')
+                }}
+                className={cn(buttonVariants({ variant: 'ghost' }))}
+              >
                 <>
                   <Icons.chevronLeft className="mr-2 h-4 w-4" />
                   Back
                 </>
               </Link>
-              <p className={`text-sm ${contract.timestamped ? 'text-muted-foreground' : 'text-red-500'}`}>
-                {contract.timestamped ? 'Timestamped' : 'Not Timestamped'}
-              </p>{' '}
             </div>
-            {contract.timestamped ? (
-              <></>
+            <button type="submit" className={cn(buttonVariants())}>
+              {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              <span>Save</span>{' '}
+            </button>
+          </div>
+
+          <div className="prose prose-stone mx-auto w-full dark:prose-invert">
+            {!isStringBlank(contract.digest) ? (
+              <p>
+                <strong>Digest:</strong> {contract.digest}
+              </p>
             ) : (
-              <button type="submit" className={cn(buttonVariants())}>
-                {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                <span>Save</span>{' '}
-              </button>
+              <p>
+                <strong>Digest:</strong> Not available
+              </p>
             )}
           </div>
-          <div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
+
+          <div className="prose prose-stone mx-auto w-full dark:prose-invert">
             <FormField
               control={form.control}
               name="title"
@@ -123,90 +142,54 @@ export function Editor({ contract }: EditorProps) {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="input1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Input 1</FormLabel>
+                  <FormControl>
+                    {/* Set the default value to the current title, if it exists{} */}
+                    <Input placeholder="Input1" {...field} />
+                  </FormControl>
+                  <FormDescription>This is the first input of your contract.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="input2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Input 2</FormLabel>
+                  <FormControl>
+                    {/* Set the default value to the current title, if it exists{} */}
+                    <Input placeholder="Input2" {...field} />
+                  </FormControl>
+                  <FormDescription>This is the second input of your contract.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="input3"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Input 3</FormLabel>
+                  <FormControl>
+                    {/* Set the default value to the current title, if it exists{} */}
+                    <Input placeholder="Input3" {...field} />
+                  </FormControl>
+                  <FormDescription>This is the third input of your contract.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
       </form>
     </Form>
-
-    // <form onSubmit={handleSubmit(onSubmit)}>
-    //   <div className="grid w-full gap-10">
-    //     <div className="flex w-full items-center justify-between">
-    //       <div className="flex items-center space-x-10">
-    //         <Link href="/dashboard/contracts" className={cn(buttonVariants({ variant: 'ghost' }))}>
-    //           <>
-    //             <Icons.chevronLeft className="mr-2 h-4 w-4" />
-    //             Back
-    //           </>
-    //         </Link>
-    //         <p className="text-sm text-muted-foreground">{contract.timestamped ? 'timestamped' : 'Draft'}</p>
-    //       </div>
-    //       <button type="submit" className={cn(buttonVariants())}>
-    //         {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-    //         <span>Save</span>
-    //       </button>
-    //     </div>
-    //     <div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
-    //       <Input
-    //         autoFocus
-    //         id="title"
-    //         defaultValue={contract.title}
-    //         placeholder="Post title"
-    //         className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
-    //         {...register('title')}
-    //       />
-    //       <div id="editor" className="min-h-[500px]" />
-    //       <p className="text-sm text-gray-500">
-    //         Use <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">Tab</kbd> to open the command menu.
-    //       </p>
-    //     </div>
-    //   </div>
-    // </form>
   )
-
-  /* return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid w-full gap-10">
-        <div className="flex w-full items-center justify-between">
-          <div className="flex items-center space-x-10">
-            <Link
-              href="/dashboard"
-              className={cn(buttonVariants({ variant: "ghost" }))}
-            >
-              <>
-                <Icons.chevronLeft className="mr-2 h-4 w-4" />
-                Back
-              </>
-            </Link>
-            <p className="text-sm text-muted-foreground">
-              {contract.timestamped ? "timestamped" : "Draft"}
-            </p>
-          </div>
-          <button type="submit" className={cn(buttonVariants())}>
-            {isSaving && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            <span>Save</span>
-          </button>
-        </div>
-        <div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
-          <TextareaAutosize
-            autoFocus
-            id="title"
-            defaultValue={contract.title}
-            placeholder="Post title"
-            className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
-            {...register("title")}
-          />
-          <div id="editor" className="min-h-[500px]" />
-          <p className="text-sm text-gray-500">
-            Use{" "}
-            <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">
-              Tab
-            </kbd>{" "}
-            to open the command menu.
-          </p>
-        </div>
-      </div>
-    </form>
-  ) */
 }
