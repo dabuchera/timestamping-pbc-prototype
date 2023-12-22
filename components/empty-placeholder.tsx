@@ -19,8 +19,12 @@ export function EmptyPlaceholder({ className, children, ...props }: EmptyPlaceho
   )
 }
 
-interface EmptyPlaceholderIconProps extends Partial<React.SVGProps<SVGSVGElement>> {
-  name: keyof typeof Icons
+// interface EmptyPlaceholderIconProps extends Partial<React.SVGProps<SVGSVGElement>> {
+//   name: keyof typeof Icons
+// }
+
+interface EmptyPlaceholderIconProps extends Omit<Partial<React.SVGProps<SVGSVGElement>>, 'ref'> {
+  name: keyof typeof Icons;
 }
 
 EmptyPlaceholder.Icon = function EmptyPlaceHolderIcon({ name, className, ...props }: EmptyPlaceholderIconProps) {
@@ -32,8 +36,7 @@ EmptyPlaceholder.Icon = function EmptyPlaceHolderIcon({ name, className, ...prop
 
   return (
     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-      {/*@ts-ignore */}
-      <Icons className={cn('h-10 w-10', className)} {...props} />
+      <Icon className={cn('h-10 w-10', className)} {...props} />
     </div>
   )
 }

@@ -77,8 +77,6 @@ export function Editor({ contract }: EditorProps) {
 
     router.refresh()
 
-    console.log(234234)
-
     return toast({
       description: 'Your post has been saved.',
     })

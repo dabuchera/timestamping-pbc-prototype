@@ -1,40 +1,44 @@
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { ContractOperations } from '@/components/contract-operations';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-    isDigestAnchored, isDigestAnchorPending, isDigestWaitingAnchoring
+    handleVerify, isDigestAnchored, isDigestAnchorPending, isDigestWaitingAnchoring
 } from '@/helpers/dcrtime';
-import { cn, formatDate } from '@/lib/utils';
+import { cn, formatDate, getStatus } from '@/lib/utils';
+import { Digest } from '@/types';
 import { Contract } from '@prisma/client';
 
+import { ContractStatus } from './contract-status';
+import { ContractTimestampingButton } from './contract-timestamping-button';
 import { Icons } from './icons';
 
 interface ContractItemProps {
   contract: Pick<Contract, 'id' | 'title' | 'timestamped' | 'createdAt'>
 }
 
-const getStatus = (digest: any): string => {
-  if (isDigestAnchored(digest)) {
-    return 'Timestamped'
-  }
-  if (isDigestWaitingAnchoring(digest)) {
-    return 'Awaiting Anchoring Time'
-  }
-  if (isDigestAnchorPending(digest)) {
-    return 'Pending'
-  }
-  return 'Not Found'
-}
-
 export function ContractItem({ contract }: ContractItemProps) {
   // const status = getStatus(contract.digest)
 
-  let testDigest =  {digest: "bdf6bc93bfdaaa44b3753351d10d2be6a59002cedb2809c3ffec62ca700a7df0", result: 1}
+  let testDigest = { digest: 'bdf6bc93bfdaaa44b3753351d10d2be6a59002cedb2809c3ffec62ca700a7df0', result: 1 }
 
   const status = getStatus(testDigest)
-  
-  console.log(status)
+
+  console.log("ContractItem")
+
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     const verifyRes = await handleVerify(testDigest)
+  //   }
+  //   if (!fetchedFirst) {
+  //     fetch()
+  //   }
+  //   const timeout = setTimeout(async () => {
+  //     await fetch()
+  //   }, 60000)
+  //   return () => clearTimeout(timeout)
+  // }, [fetchedFirst])
 
   return (
     <div className="flex items-center justify-between p-4">
@@ -47,26 +51,12 @@ export function ContractItem({ contract }: ContractItemProps) {
             <p className="text-sm text-muted-foreground">{formatDate(contract.createdAt?.toDateString())}</p>
           </div>
         </div>
-        <Link href={contract.timestamped ? '/add Here timestamp link' : ''}>
-          <span
-            className={cn(
-              'group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:text-accent-foreground',
-              contract.timestamped ? 'hover:bg-accent' : 'cursor-default'
-            )}
-          >
-            {/* {contract.timestamped? <Icons.timestamped className="mr-2 h-4 w-4" />
-                :<Icons.nottimestamped className="mr-2 h-4 w-4" />
-                } */}
-            {status === 'Timestamped' && <Icons.timestamped className="mr-2 h-4 w-4" />}
-            {status === 'Awaiting Anchoring Time' && <Icons.spinner className="animate-spin mr-2 h-4 w-4" />}
-            {status === 'Pending' && <Icons.loader className="animate-spin mr-2 h-4 w-4" />}
-            {status === 'Not Found' && <Icons.nottimestamped className="mr-2 h-4 w-4" />}
-            {/* Other content */}
-            <span>{status}</span>
-          </span>
-        </Link>
+        <ContractStatus contract={{ id: contract.id, title: contract.title, timestamped: contract.timestamped }} />
       </div>
-      <ContractOperations contract={{ id: contract.id, title: contract.title }} />
+      <div className="flex gap-4">
+        <ContractTimestampingButton contract={{ id: contract.id, title: contract.title }} />
+        <ContractOperations contract={{ id: contract.id, title: contract.title }} />
+      </div>
     </div>
   )
 }

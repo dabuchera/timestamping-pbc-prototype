@@ -11,7 +11,15 @@ export const verify = dcrtime.verify;
 
 export const getLastDigests = dcrtime.getLastDigests;
 
+export const getStatus = dcrtime.getStatus;
+
 // Handlers for API calls
+export const handleGetStatus = async id => {
+    const res = await getStatus(id);
+    if (res.error) throw res.error;
+    return res;
+};
+
 export const handleVerify = async data => {
     const digests = getDigests(data);
     const res = await verify(digests);
@@ -21,7 +29,11 @@ export const handleVerify = async data => {
 
 export const handleTimestamp = async data => {
     const digests = getDigests(data);
-    const res = await timestamp(digests, "data");
+    const id = getId(data);
+    // console.log(digests, id)
+    // const res = await timestamp(digests, "data");
+    const res = await timestamp(digests, id);
+    
     if (res.error) throw res.error;
     return res;
 };
@@ -43,6 +55,8 @@ export const mergeDigestsAndResult = (digests, res) =>
     });
 
 export const getDigests = data => data.map(d => d.digest);
+
+export const getId = data => data.map(d => d.id);
 
 export const isDigestAnchored = digest =>
     !!(digest.chaininformation && digest.chaininformation.chaintimestamp);

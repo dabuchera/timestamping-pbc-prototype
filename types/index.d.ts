@@ -32,11 +32,47 @@ export type DashboardConfig = {
   sidebarNav: SidebarNavItem[]
 }
 
-export type MyJsonObject = {
-  id: number;
-  name: string;
-  attributes: {
-      type: string;
-      valid: boolean;
-  };
+export type ContractObject = {
+  id: string
+  title: string
 }
+
+// Dcrtime types
+export type InputData = {
+  id: string
+  payload: string
+  digest: string
+}
+
+/*  
+    0	Invalid
+    1	The HASH has been sent to the dcrtime server to be anchored
+    2	Hash was already in the server 
+*/
+export type Digest = {
+  digest: string
+  result: number
+  servertimestamp?: number
+  chaininformation?: ChainInformation
+}
+
+export type DcrtimeResponse = {
+  digests: Digest[]
+  id: string
+  // servertimestamp: number
+}
+
+type MerklePath = {
+  NumLeaves: number
+  Hashes: number[][] // Assuming Hashes is an array of arrays of numbers
+  Flags: string
+}
+
+type ChainInformation = {
+  chaintimestamp: number
+  merklepath: MerklePath
+  merkleroot: string
+  transaction: string
+}
+
+
