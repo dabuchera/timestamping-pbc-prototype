@@ -49,7 +49,7 @@ export function DashboardNav({ items }: DashboardNavProps) {
               <Icons.info className="ml-2 h-4 w-4" />
             </TooltipTrigger>
             <TooltipContent>
-              <p className="text-xs">
+              <p className="text-xs pt-10">
                 Anchoring is done hourly and
                 <br />
                 the next one is in {minsToNextHour} minutes

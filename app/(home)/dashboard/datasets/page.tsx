@@ -1,3 +1,6 @@
+import { Legend, XAxis, YAxis } from 'recharts';
+
+import LineChartEx from '@/components/chart/line-chart-ex';
 import { ContractCreateButton } from '@/components/contract-create-button';
 import { ContractItem } from '@/components/contract-item';
 import { DashboardHeader } from '@/components/dashboard-header';
@@ -10,23 +13,26 @@ export const metadata = {
 }
 
 export default async function IndexPage() {
-//   const contracts = await db.contract.findMany({
-//     select: {
-//       id: true,
-//       title: true,
-//       timestamped: true,
-//       createdAt: true,
-//     },
-//     orderBy: {
-//       updatedAt: 'desc',
-//     },
-//   })
+  //   const contracts = await db.contract.findMany({
+  //     select: {
+  //       id: true,
+  //       title: true,
+  //       timestamped: true,
+  //       createdAt: true,
+  //     },
+  //     orderBy: {
+  //       updatedAt: 'desc',
+  //     },
+  //   })
+
 
   return (
     <DashboardShell>
       <DashboardHeader heading="Datasets" text="Manage datasets.">
         {/* <ContractCreateButton /> */}
       </DashboardHeader>
+      {/* add here the selected dataset */}
+      <LineChartEx/>
       {/* <div>
         {contracts?.length ? (
           <div className="divide-y divide-border rounded-md border">
