@@ -35,6 +35,10 @@ export type DashboardConfig = {
 export type ContractObject = {
   id: string
   title: string
+  setPoint: number
+  deviation: number
+  penalty: number
+  checkInterval: string
 }
 
 // Dcrtime types

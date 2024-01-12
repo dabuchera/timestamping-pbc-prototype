@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 
 export function Header() {
   return (
-    <div className="flex mb-10">
+    <div className="flex">
       <div className="flex-1">
         <NavigationMenu className="py-5 px-5">
           <NavigationMenuList>

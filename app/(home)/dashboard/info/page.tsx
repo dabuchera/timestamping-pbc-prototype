@@ -6,7 +6,7 @@ import { DashboardShell } from '@/components/shell';
 import { db } from '@/lib/db';
 
 export const metadata = {
-  title: 'Templates',
+  title: 'Info',
 }
 
 export default async function IndexPage() {
@@ -24,7 +24,7 @@ export default async function IndexPage() {
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Templates" text="Create and manage templates.">
+      <DashboardHeader heading="Info" text="This should describe some background stuff.">
         {/* <ContractCreateButton /> */}
       </DashboardHeader>
       {/* <div>

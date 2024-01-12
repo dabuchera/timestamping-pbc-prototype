@@ -58,9 +58,11 @@ export async function PATCH(
       data: {
         title: body.title,
         digest: body.digest,
-        input1: body.input1,
-        input2: body.input2,
-        input3: body.input3,
+        dataset: body.dataset,
+        setPoint: body.setPoint,
+        deviation: body.deviation,
+        penalty: body.penalty,
+        checkInterval: body.checkInterval,
       },
     })
 

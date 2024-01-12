@@ -13,6 +13,7 @@ import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
+import { isDigestBlank } from '@/lib/utils';
 import { Contract } from '@prisma/client';
 
 import { ContractTimestampingButton } from './contract-timestamping-button';
@@ -50,7 +51,7 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mt-2" align="end" >
-          <DropdownMenuItem disabled={!!contract.digest}>
+          <DropdownMenuItem disabled={!isDigestBlank(contract.digest)}>
             <Link href={`/dashboard/contracts/editor/${contract.id}`} className="flex w-full">
               Edit
             </Link>
@@ -59,7 +60,7 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
           <DropdownMenuItem
             className="flex cursor-pointer items-center text-destructive focus:text-destructive"
             onSelect={() => setShowDeleteAlert(true)}
-            disabled={!!contract.digest}
+            disabled={!isDigestBlank(contract.digest)}
           >
             Delete
           </DropdownMenuItem>

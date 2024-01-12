@@ -11,13 +11,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// The ? are only essential when an empty contract is created -> created only with title and digest = ""
 model Contract {
   id          String   @id @default(cuid())
-  digest      String
   title       String
-  input1      String
-  input2      String
-  input3      String
+  digest      String   @default("none")
+  dataset     String?
+  setPoint    Float?
+  deviation   Float?
+  // This is the penalty per 5% per Interval
+  // That means if the datapoints are under or above the deviation
+  // for 5% of the time -> this is the penalty
+  penalty     Float?
+  // Here are two options -> Weekly / Monthly
+  checkInterval  String?
   createdAt   DateTime @default(now()) @map(name: "created_at")
   updatedAt   DateTime @default(now()) @map(name: "updated_at")
 

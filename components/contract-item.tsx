@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
     handleVerify, isDigestAnchored, isDigestAnchorPending, isDigestWaitingAnchoring
 } from '@/helpers/dcrtime';
-import { cn, formatDate, getStatus } from '@/lib/utils';
+import { cn, formatDate, getStatus, isDigestBlank } from '@/lib/utils';
 import { Digest } from '@/types';
 import { Contract } from '@prisma/client';
 
@@ -59,7 +59,7 @@ export function ContractItem({ contract }: ContractItemProps) {
         <ContractTimestampingButton
           contract={{ id: contract.id, title: contract.title }}
           // Button is disabled if contract.digest has a value
-          disabled={!!contract.digest}
+          disabled={!isDigestBlank(contract.digest)}
         />
         <ContractOperations contract={{ id: contract.id, digest: contract.digest, title: contract.title }} />
       </div>

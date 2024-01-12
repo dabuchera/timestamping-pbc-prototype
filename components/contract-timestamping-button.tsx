@@ -13,7 +13,7 @@ import { Contract } from '@prisma/client';
 
 interface ContractTimestampingButtonProps extends ButtonProps {
   // Adjust to what needed within the contract class
-  contract: Pick<Contract, 'id' | 'title'>
+  contract: Pick<Contract, 'id' | 'title' | 'setPoint' | 'deviation' | 'penalty' | 'checkInterval'>
 }
 
 export function ContractTimestampingButton({ contract, className, variant, ...props }: ContractTimestampingButtonProps) {
@@ -36,14 +36,41 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
 
   async function onClick() {
     setIsLoading(true)
-    const JsonObject: ContractObject = {
-      id: contract.id,
-      title: contract.title,
+    let JsonObject : ContractObject
+    if (
+      contract.setPoint !== null &&
+      contract.deviation !== null &&
+      contract.penalty !== null &&
+      contract.checkInterval !== null
+    ) {
+      // All properties are not null
+      JsonObject = {
+        id: contract.id,
+        title: contract.title,
+        setPoint: contract.setPoint,
+        deviation: contract.deviation,
+        penalty: contract.penalty,
+        checkInterval: contract.checkInterval,
+      };
+    
+      // Now you can use JsonObject safely
+    } else {
+      // At least one property is null, handle the condition here
+      // You can show an error message or take appropriate action
+      return toast({
+        title: 'Something went wrong.',
+        description: 'Something in your JsonObject is wrong. Please try again.',
+        variant: 'destructive',
+      })
     }
+
+  // contract: Pick<Contract, 'id' | 'title' | 'setPoint' | 'deviation' | 'penalty' | 'checkInterval'>
+
 
     const processedData = await processJsonObject(JsonObject)
 
     const res = await handleTimestamp(processedData)
+    
     console.log(res)
 
     const response = await fetch(`/api/contracts/${contract.id}`, {

@@ -23,6 +23,11 @@ export function isStringBlank(str: string | undefined) {
   return !str || /^\s*$/.test(str)
 }
 
+// check if digest existant or not
+export function isDigestBlank(str: string | undefined) {
+  return !str || /^\s*$/.test(str) || str === "none"
+}
+
 // Change that to content or a combination of different attributes
 export async function processJsonObject(jsonObject: ContractObject) {
   // Convert JSON object to string

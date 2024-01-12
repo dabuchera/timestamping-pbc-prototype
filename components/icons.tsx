@@ -29,11 +29,12 @@ export const Icons = {
   twitter: Twitter,
   check: Check,
   timestamping: AlarmClockCheck,
+  templates: LayoutTemplate,
   // Contract Operations
   ellipsis: MoreVertical,
   disabled: XOctagon,
   // Dashboard Nav
-  templates: LayoutTemplate,
+  info: Info,
   datasets: Database,
   contracts: FileCog,
   results: Calculator,
@@ -41,5 +42,4 @@ export const Icons = {
   // Timestamping info
   timestamped: Timer,
   nottimestamped: TimerOff,
-  info: Info,
 }

@@ -31,9 +31,11 @@ export default async function EditorPage({ params }: EditorPageProps) {
         id: contract.id,
         title: contract.title,
         digest: contract.digest,
-        input1: contract.input1,
-        input2: contract.input2,
-        input3: contract.input3,
+        dataset: contract.dataset,
+        setPoint: contract.setPoint,
+        deviation: contract.deviation,
+        penalty: contract.penalty,
+        checkInterval: contract.checkInterval,
       }}
     />
   )

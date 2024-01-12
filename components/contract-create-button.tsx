@@ -18,6 +18,7 @@ export function ContractCreateButton({
   const router = useRouter()
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
+  // Create empty contract
   async function onClick() {
     setIsLoading(true)
 
@@ -28,12 +29,11 @@ export function ContractCreateButton({
       },
       body: JSON.stringify({
         title: "Untitled Contract",
-        digest: "",
-        input1: "",
-        input2: "",
-        input3: ""
+        digest: "none"
       }),
     })
+
+    console.log(response)
 
     setIsLoading(false)
 

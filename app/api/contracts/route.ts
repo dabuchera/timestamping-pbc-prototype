@@ -42,12 +42,9 @@ export async function POST(req: Request) {
 
     const post = await db.contract.create({
       data: {
-        // Generate contract can be done only with title
+        // Generate contract can be done only with title & digest
         title: body.title,
         digest: body.digest,
-        input1: body.input1,
-        input2: body.input2,
-        input3: body.input3,
       },
       select: {
         id: true,

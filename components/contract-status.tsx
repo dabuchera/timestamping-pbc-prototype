@@ -23,7 +23,7 @@ export function ContractStatus({ contract }: ContractStatusProps) {
     let isMounted = true;
 
     const fetchData = async () => {
-      if (!contract.digest) {
+      if (contract.digest === "none") {
         setStatus('Not Timestamped');
         return;
       }
@@ -99,6 +99,7 @@ export function ContractStatus({ contract }: ContractStatusProps) {
     if (contract.digest) {
       try {
         const verifyRes = await handleVerify([{ digest: contract.digest, id: contract.id, payload: 'null' }]);
+        console.log(verifyRes);
         const stat = getStatus(verifyRes.digests[0]);
         console.log(stat);
       } catch (error) {

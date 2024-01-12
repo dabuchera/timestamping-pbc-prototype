@@ -14,9 +14,9 @@ export const dashboardConfig: DashboardConfig = {
   ],
   sidebarNav: [
     {
-      title: 'Templates',
-      href: '/dashboard/templates',
-      icon: 'templates',
+      title: 'Info',
+      href: '/dashboard/info',
+      icon: 'info',
     },
     {
       title: 'Datasets',
