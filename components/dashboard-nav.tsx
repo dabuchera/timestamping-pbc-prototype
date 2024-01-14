@@ -41,7 +41,7 @@ export function DashboardNav({ items }: DashboardNavProps) {
 
   return (
     <>
-      <button className={cn(buttonVariants({ variant: 'outlineWithoutHover' }), 'text-sm mb-4')}>
+      {/* <button className={cn(buttonVariants({ variant: 'outlineWithoutHover' }), 'text-sm mb-4')}>
         Next Anchoring in {minsToNextHour}{"'"}
         <TooltipProvider>
           <Tooltip>
@@ -58,7 +58,7 @@ export function DashboardNav({ items }: DashboardNavProps) {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      </button>
+      </button> */}
       <nav className="grid items-start gap-2">
         {items.map((item, index) => {
           const Icon = Icons[item.icon || 'arrowRight']

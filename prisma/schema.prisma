@@ -31,7 +31,6 @@ model Contract {
   @@map(name: "contracts")
 }
 
-// The ? are only essential when an empty contract is created -> created only with name
 model Dataset {
   id        String   @id @default(cuid())
   name      String
@@ -39,4 +38,12 @@ model Dataset {
   timestamp DateTime
 
   @@map(name: "datasets")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  password  String
+
+  @@map(name: "users")
 }

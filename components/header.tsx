@@ -1,15 +1,11 @@
 'use client'
 
-import { BedIcon, HomeIcon } from 'lucide-react';
-import Link from 'next/link';
+import { HomeIcon } from 'lucide-react';
 import * as React from 'react';
 
-// import { Icons } from "@/components/icons"
 import {
-    NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList,
-    navigationMenuTriggerStyle
+    NavigationMenu, NavigationMenuLink, NavigationMenuList
 } from '@/components/ui/navigation-menu';
-import { cn } from '@/lib/utils';
 
 export function Header() {
   return (
@@ -22,7 +18,7 @@ export function Header() {
                 <HomeIcon size={24} />
               </a>
             </NavigationMenuLink>
-            <NavigationMenuItem>
+            {/* <NavigationMenuItem>
               <Link href="/dashboard" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Dashboard</NavigationMenuLink>
               </Link>
@@ -36,7 +32,7 @@ export function Header() {
               <Link href="/various" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Various</NavigationMenuLink>
               </Link>
-            </NavigationMenuItem>
+            </NavigationMenuItem> */}
           </NavigationMenuList>
         </NavigationMenu>
       </div>
