@@ -1,10 +1,15 @@
 'use client'
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import { Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { db } from '@/lib/db';
 
+import { DropdownMenuCheckboxItem } from '../ui/dropdown-menu';
+import { MultiSelect } from '../ui/multi-select';
+import {
+    Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue
+} from '../ui/select';
 import LineChart from './line-chart';
 
 type Props = {}
@@ -40,21 +45,29 @@ const data = [
     us: 3800,
   },
 ]
-const dataKeys = ['1', '2',  '3']
+// const dataKeys = ['1', '2', '3']
 // const dataKeys = ['uk']
 const colors = ['#ec6782', '#c39efe']
 
 interface LineChartExProps {
-	data: any
-  }
+  data: any
+  names: string[]
+}
 
-export default function LineChartEx({data}: LineChartExProps) {
+export default function LineChartEx({ data, names }: LineChartExProps) {
+  const [selected, setSelected] = useState<string[]>([])
+
+  const options = names.map((name) => ({ value: name, label: name }))
+
   return (
-    <LineChart data={data} colors={colors} dataKeys={dataKeys}>
-      <Tooltip />
-      <Legend />
-      <XAxis dataKey="timestamp" stroke="#3d3b3b" fontSize={12} tickLine={false} />
-      <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value: number) => `${value}°`} />
-    </LineChart>
+    <>
+      <LineChart data={data} colors={colors} dataKeys={selected}>
+        <Tooltip />
+        <Legend />
+        <XAxis dataKey="timestamp" stroke="#3d3b3b" fontSize={12} tickLine={false} />
+        <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value: number) => `${value}°`} />
+      </LineChart>
+      <MultiSelect options={options} selected={selected} onChange={setSelected} className="w-[560px]" />
+    </>
   )
 }

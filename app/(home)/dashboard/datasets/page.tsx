@@ -5,6 +5,7 @@ import { DatasetItem } from '@/components/dataset-item';
 import { EmptyPlaceholder } from '@/components/empty-placeholder';
 import { DashboardShell } from '@/components/shell';
 import { Checkbox } from '@/components/ui/checkbox';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { db } from '@/lib/db';
 
 export const metadata = {
@@ -37,27 +38,27 @@ async function getAllEntries(name: string) {
 }
 
 async function getDatasetValuesByTimestamp() {
-  const distinctNames = await getNames();
-  const uniqueDatasetNames = distinctNames.map((item) => item.name);
+  const distinctNames = await getNames()
+  const uniqueDatasetNames = distinctNames.map((item) => item.name)
 
-  const datasetValuesByTimestamp = [];
+  const datasetValuesByTimestamp = []
 
   for (const name of uniqueDatasetNames) {
-    const entries = await getAllEntries(name);
+    const entries = await getAllEntries(name)
     for (const entry of entries) {
-      const timestamp = entry.timestamp.toISOString(); // Convert timestamp to ISO string
-      const existingEntry = datasetValuesByTimestamp.find((item) => item.timestamp === timestamp);
+      const timestamp = entry.timestamp.toISOString() // Convert timestamp to ISO string
+      const existingEntry = datasetValuesByTimestamp.find((item) => item.timestamp === timestamp)
       if (!existingEntry) {
-        const newEntry = { timestamp };
-        newEntry[name] = entry.value;
-        datasetValuesByTimestamp.push(newEntry);
+        const newEntry = { timestamp }
+        newEntry[name] = entry.value
+        datasetValuesByTimestamp.push(newEntry)
       } else {
-        existingEntry[name] = entry.value;
+        existingEntry[name] = entry.value
       }
     }
   }
 
-  return datasetValuesByTimestamp;
+  return datasetValuesByTimestamp
 }
 
 export default async function IndexPage() {
@@ -87,14 +88,16 @@ export default async function IndexPage() {
       <DashboardHeader heading="Datasets" text="Manage datasets.">
         <DatasetCreateButton />
       </DashboardHeader>
-      {uniqueDatasetNames.length > 0 ? <LineChartEx data={allData} />: <></>}
+      {uniqueDatasetNames.length > 0 ? <LineChartEx data={allData} names={uniqueDatasetNames} /> : <></>}
       <div>
         {uniqueDatasetNames?.length ? (
-          <div className="divide-y divide-border rounded-md border">
-            {uniqueDatasetNames.map((name) => (
-              <DatasetItem key={name} name={name} />
-            ))}
-          </div>
+          <ScrollArea className="h-52">
+            <div className="divide-y divide-border rounded-md border">
+              {uniqueDatasetNames.map((name) => (
+                <DatasetItem key={name} name={name} />
+              ))}
+            </div>
+          </ScrollArea>
         ) : (
           <EmptyPlaceholder className="min-h-[200px]">
             <EmptyPlaceholder.Icon name="data" />
