@@ -9,6 +9,9 @@
     "lint": "next lint",
     "postinstall": "prisma generate"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
     "@prisma/client": "^5.7.1",
@@ -25,12 +28,14 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "crypto-js": "^4.1.1",
     "cuid": "^3.0.0",
     "dcrtimejs": "https://github.com/decred/dcrtimejs",
+    "fs": "^0.0.1-security",
     "lucide-react": "^0.297.0",
     "next": "14.0.4",
     "next-auth": "^5.0.0-beta.4",
@@ -52,7 +57,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "postcss": "^8",
-    "prisma": "^5.7.1",
+    "prisma": "^5.8.0",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }

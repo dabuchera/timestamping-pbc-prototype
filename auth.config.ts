@@ -1,11 +1,13 @@
 import type { NextAuthConfig } from 'next-auth';
- 
+import Credentials from 'next-auth/providers/credentials';
+
 export const authConfig = {
   pages: {
     signIn: '/',
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
+      console.log('authorized')
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       if (isOnDashboard) {
@@ -17,5 +19,5 @@ export const authConfig = {
       return true;
     },
   },
-  providers: [], // Add providers with an empty array for now
+  providers: [Credentials({})], // Add providers with an empty array for now
 } satisfies NextAuthConfig;

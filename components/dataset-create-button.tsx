@@ -96,7 +96,7 @@ export function DatasetCreateButton({ className, variant, ...props }: ContractCr
     router.refresh()
 
     return toast({
-      description: 'Your post has been saved.',
+      description: 'Your dataset has been saved.',
     })
   }
 
