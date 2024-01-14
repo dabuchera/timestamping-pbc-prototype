@@ -25,7 +25,7 @@ export function isStringBlank(str: string | undefined) {
 
 // check if digest existant or not
 export function isDigestBlank(str: string | undefined) {
-  return !str || /^\s*$/.test(str) || str === "none"
+  return !str || /^\s*$/.test(str)
 }
 
 // Change that to content or a combination of different attributes

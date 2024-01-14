@@ -15,7 +15,7 @@ import { ContractTimestampingButton } from './contract-timestamping-button';
 import { Icons } from './icons';
 
 interface ContractItemProps {
-  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'createdAt'>
+  contract: Pick<Contract, 'id' | 'digest' | 'dataset' | 'title' | 'setPoint' | 'deviation' | 'penalty' | 'checkInterval' | 'createdAt'>
 }
 
 export function ContractItem({ contract }: ContractItemProps) {
@@ -57,7 +57,16 @@ export function ContractItem({ contract }: ContractItemProps) {
       </div>
       <div className="flex gap-4">
         <ContractTimestampingButton
-          contract={{ id: contract.id, title: contract.title }}
+          contract={{
+            id: contract.id,
+            title: contract.title,
+            digest: contract.digest,
+            dataset: contract.dataset,
+            setPoint: contract.setPoint,
+            deviation: contract.deviation,
+            penalty: contract.deviation,
+            checkInterval: contract.checkInterval,
+          }}
           // Button is disabled if contract.digest has a value
           disabled={!isDigestBlank(contract.digest)}
         />

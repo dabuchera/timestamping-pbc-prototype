@@ -1,16 +1,13 @@
 'use client'
 
-// import '@/styles/editor.css';
-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-// import TextareaAutosize from 'react-textarea-autosize';
 import * as z from 'zod';
 
 import { Icons } from '@/components/icons';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
     Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
@@ -19,40 +16,33 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/use-toast';
-import { cn, isDigestBlank } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { contractPatchSchema } from '@/lib/validations/contract';
 // import EditorJS from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Contract } from '@prisma/client';
-
-interface EditorProps {
-  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'dataset' | 'setPoint' | 'deviation' | 'penalty' | 'checkInterval'>
-}
 
 // type FormData = z.infer<typeof contractPatchSchema>
 
-export function Editor({ contract }: EditorProps) {
+export function ContractCreator({ contractId }: { contractId: string }) {
   // const { register, handleSubmit } = useForm<FormData>({
   //   resolver: zodResolver(contractPatchSchema),
   // })
-  const router = useRouter()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof contractPatchSchema>>({
     resolver: zodResolver(contractPatchSchema),
     defaultValues: {
-      title: contract.title || '',
-      dataset: contract.dataset || '',
-      // Die Fehlermeldung below sind ok. Da diese Werte zu Beginn Null sind brauchen sie ein empty string um controlled zu werden
+      title: '',
+      dataset: 'one',
+      // Die Fehlermeldung @ts-ignore below sind ok. Da diese Werte zu Beginn Null sind brauchen sie ein empty string um controlled zu werden
       // @ts-ignore
-      setPoint: contract.setPoint !== null ? parseFloat(contract.setPoint.toString()) : '', // Convert to number here
+      setPoint: '',
       // @ts-ignore
-      deviation: contract.deviation || '',
+      deviation: '',
       // @ts-ignore
-      penalty: contract.penalty || '',
-      checkInterval: contract.checkInterval || undefined,
-      // ... any other fields you want to set default values for
+      penalty: '',
+      checkInterval: 'weekly',
     },
   })
 
@@ -60,19 +50,18 @@ export function Editor({ contract }: EditorProps) {
   async function onSubmit(values: z.infer<typeof contractPatchSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-
-    console.log('onSubmit')
-    console.log(values)
-
     setIsSaving(true)
 
-    const response = await fetch(`/api/contracts/${contract.id}`, {
-      method: 'PATCH',
+    const response = await fetch(`/api/contracts`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        id: contractId,
         title: values.title,
+        // digest will be set in route.ts
+        // digest: "",
         dataset: values.dataset,
         setPoint: values.setPoint,
         deviation: values.deviation,
@@ -91,8 +80,6 @@ export function Editor({ contract }: EditorProps) {
       })
     }
 
-    router.refresh()
-
     return toast({
       description: 'Your post has been saved.',
     })
@@ -103,25 +90,25 @@ export function Editor({ contract }: EditorProps) {
       {/* Back */}
       <div className="prose prose-stone mx-auto w-full dark:prose-invert">
         <div className="flex items-center space-x-10">
-          <Link
-            href="/dashboard/contracts"
-            onClick={() => {
-              // This is for the case that Save button not clicked
-              // And if digest set don't submit again when going back
-              // router.push('/dashboard/contracts')
-              if (isDigestBlank(contract.digest)) {
-                router.push('/dashboard/contracts')
-              } else {
-                onSubmit
-              }
-            }}
-            className={cn(buttonVariants({ variant: 'ghost' }))}
-          >
+          <Link href="/dashboard/contracts" className={cn(buttonVariants({ variant: 'ghost' }))}>
             <>
               <Icons.chevronLeft className="mr-2 h-4 w-4" />
               Back
             </>
           </Link>
+          {/* Test Button */}
+          <button
+            className={cn(buttonVariants())}
+            onClick={() => {
+              // Your onClick logic here
+              console.log('Button Clicked!')
+              console.log('Form Value:', form.getValues())
+              console.log('Form Errors:', form.formState.errors)
+            }}
+          >
+            {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            <span>Test</span>{' '}
+          </button>
         </div>
       </div>
 
@@ -130,22 +117,15 @@ export function Editor({ contract }: EditorProps) {
           <div className="grid gap-5">
             {/* Display the digest or a message if it's null */}
             <div className="flex items-center justify-between">
-              {!isDigestBlank(contract.digest) ? (
-                <p>
-                  <strong>Digest:</strong> {contract.digest}
-                </p>
-              ) : (
-                <p>
-                  <strong>Digest:</strong> Not available
-                </p>
-              )}
+              <p>
+                <strong>Digest:</strong> Not available
+              </p>
               {/* Save Button */}
-              <button type="submit" className={cn(buttonVariants())} disabled={!isDigestBlank(contract.digest)}>
+              <button type="submit" className={cn(buttonVariants())}>
                 {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 <span>Save</span>{' '}
               </button>
             </div>
-            {/* Form Title */}
             <div className="prose prose-stone mx-auto w-full dark:prose-invert grid gap-2">
               <FormField
                 control={form.control}
@@ -155,7 +135,7 @@ export function Editor({ contract }: EditorProps) {
                     <FormLabel>Title</FormLabel>
                     <FormControl>
                       {/* Set the default value to the current title, if it exists{} */}
-                      <Input placeholder="Title" {...field} disabled={!isDigestBlank(contract.digest)} />
+                      <Input placeholder="Title" {...field} />
                     </FormControl>
                     <FormDescription>This is the title of your contract.</FormDescription>
                     <FormMessage />
@@ -167,12 +147,19 @@ export function Editor({ contract }: EditorProps) {
                 name="dataset"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Dataset -  Hier auch Selection von vorhandene Datensätzen</FormLabel>
-                    <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
-                      <Input placeholder="Dataset" {...field} disabled={!isDigestBlank(contract.digest)} />
-                    </FormControl>
-                    <FormDescription>This is the used dataset for your contract.</FormDescription>
+                    <FormLabel>Dataset</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a dataset for your contract" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="one">One</SelectItem>
+                        <SelectItem value="two">Two</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>This is the used dataset.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -183,7 +170,7 @@ export function Editor({ contract }: EditorProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Checking Interval</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!isDigestBlank(contract.digest)}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a checking Interval for your contract" />
@@ -215,10 +202,9 @@ export function Editor({ contract }: EditorProps) {
                         onChange={(e) => {
                           e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
                         }}
-                        disabled={!isDigestBlank(contract.digest)}
                       />
                     </FormControl>
-                    <FormDescription>This is the Set Point for your contract.</FormDescription>
+                    <FormDescription>This is the set point used.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -239,10 +225,9 @@ export function Editor({ contract }: EditorProps) {
                         onChange={(e) => {
                           e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
                         }}
-                        disabled={!isDigestBlank(contract.digest)}
                       />
                     </FormControl>
-                    <FormDescription>This is the Deviation for your contract.</FormDescription>
+                    <FormDescription>This is the deviation used.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -263,10 +248,9 @@ export function Editor({ contract }: EditorProps) {
                         onChange={(e) => {
                           e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
                         }}
-                        disabled={!isDigestBlank(contract.digest)}
                       />
                     </FormControl>
-                    <FormDescription>This is the Penalty for your contract.</FormDescription>
+                    <FormDescription>This is the penalty used.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

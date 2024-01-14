@@ -1,11 +1,11 @@
 import * as z from 'zod';
 
 import { db } from '@/lib/db';
-import { contractPostSchema } from '@/lib/validations/contract';
+import { contractPostSchemaDatabase } from '@/lib/validations/contract';
 
 export async function GET() {
   try {
-    const posts = await db.contract.findMany({
+    const contracts = await db.contract.findMany({
       select: {
         id: true,
         title: true,
@@ -13,7 +13,7 @@ export async function GET() {
       },
     })
 
-    return new Response(JSON.stringify(posts))
+    return new Response(JSON.stringify(contracts))
   } catch (error) {
     return new Response(null, { status: 500 })
   }
@@ -38,20 +38,26 @@ export async function POST(req: Request) {
     } */
 
     const json = await req.json()
-    const body = contractPostSchema.parse(json)
+    const body = contractPostSchemaDatabase.parse(json)
 
-    const post = await db.contract.create({
+    const contract = await db.contract.create({
       data: {
         // Generate contract can be done only with title & digest
+        id: body.id,
         title: body.title,
-        digest: body.digest,
+        digest: '',
+        dataset: body.dataset,
+        setPoint: body.setPoint,
+        deviation: body.deviation,
+        penalty: body.penalty,
+        checkInterval: body.checkInterval,
       },
       select: {
         id: true,
       },
     })
 
-    return new Response(JSON.stringify(post))
+    return new Response(JSON.stringify(contract))
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 })

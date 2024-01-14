@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
@@ -10,35 +9,30 @@ import {
     AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
-import { isDigestBlank } from '@/lib/utils';
-import { Contract } from '@prisma/client';
 
-import { ContractTimestampingButton } from './contract-timestamping-button';
-
-async function deleteContract(postId: string) {
-  const response = await fetch(`/api/contracts/${postId}`, {
+async function deleteDataset(name: string) {
+  const response = await fetch(`/api/datasets/${name}`, {
     method: 'DELETE',
   })
 
   if (!response?.ok) {
     toast({
       title: 'Something went wrong.',
-      description: 'Your post was not deleted. Please try again.',
+      description: 'Your dataset was not deleted. Please try again.',
       variant: 'destructive',
     })
   }
-
   return true
 }
 
-interface ContractOperationsProps {
-  contract: Pick<Contract, 'id' | 'digest' | 'title'>
+interface DatasetOperationsProps {
+  name: string
 }
 
-export function ContractOperations({ contract }: ContractOperationsProps) {
+export function DatasetOperations({ name }: DatasetOperationsProps) {
   const router = useRouter()
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false)
@@ -47,20 +41,13 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-muted">
-         <Icons.ellipsis className="h-4 w-4" />
+          <Icons.ellipsis className="h-4 w-4" />
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="mt-2" align="end" >
-          <DropdownMenuItem disabled={!isDigestBlank(contract.digest)}>
-            <Link href={`/dashboard/contracts/editor/${contract.id}`} className="flex w-full">
-              Edit
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
+        <DropdownMenuContent className="mt-2" align="end">
           <DropdownMenuItem
             className="flex cursor-pointer items-center text-destructive focus:text-destructive"
             onSelect={() => setShowDeleteAlert(true)}
-            disabled={!isDigestBlank(contract.digest)}
           >
             Delete
           </DropdownMenuItem>
@@ -69,7 +56,7 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure you want to delete this contract?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure you want to delete this dataset?</AlertDialogTitle>
             <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -79,11 +66,12 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
                 event.preventDefault()
                 setIsDeleteLoading(true)
 
-                const deleted = await deleteContract(contract.id)
+                const deleted = await deleteDataset(name)
 
                 if (deleted) {
                   setIsDeleteLoading(false)
                   setShowDeleteAlert(false)
+                  // This forces a cache invalidation.
                   router.refresh()
                 }
               }}

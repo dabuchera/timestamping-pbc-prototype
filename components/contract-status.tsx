@@ -23,7 +23,7 @@ export function ContractStatus({ contract }: ContractStatusProps) {
     let isMounted = true;
 
     const fetchData = async () => {
-      if (contract.digest === "none") {
+      if (contract.digest.length === 0) {
         setStatus('Not Timestamped');
         return;
       }

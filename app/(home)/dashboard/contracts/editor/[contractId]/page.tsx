@@ -1,6 +1,6 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound, redirect, useRouter } from 'next/navigation';
 
-import { Editor } from '@/components/editor';
+import { ContractEditor } from '@/components/contract-editor';
 import { db } from '@/lib/db';
 import { Contract } from '@prisma/client';
 
@@ -13,20 +13,23 @@ async function getContractForUser(contractId: Contract['id']) {
 }
 
 interface EditorPageProps {
-  params: { contractId: string }
+  params: { contractId: string}
 }
 
 export default async function EditorPage({ params }: EditorPageProps) {
-  const contract = await getContractForUser(params.contractId)
+  // const router = useRouter();
+  // const { new: isNewContract } = router.query;
+  // // Check if the 'new' query parameter is set to 'true'
+  // const isNewContract = query.new === 'true';
 
-  console.log(contract)
+  const contract = await getContractForUser(params.contractId)
 
   if (!contract) {
     notFound()
   }
 
   return (
-    <Editor
+    <ContractEditor
       contract={{
         id: contract.id,
         title: contract.title,
