@@ -38,7 +38,7 @@ export function DatasetCreateButton({ className, variant, ...props }: ContractCr
       method: 'GET',
     })
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
 
     // Check if Name is already in database
     if (data.includes(nameInput)) {
@@ -56,6 +56,7 @@ export function DatasetCreateButton({ className, variant, ...props }: ContractCr
     // const endTimestamp = new Date('2024-01-04T23:59:59Z').getTime()
     const endTimestamp = new Date('2024-01-31T23:59:59Z').getTime()
 
+    console.log("Start generating data")
     for (let timestamp = startTimestamp; timestamp <= endTimestamp; timestamp += increment) {
       // Generate a random value within the range of 20 to 30
       const randomValue = 20 + Math.random() * 10 // Generates a random value between 20 and 30
@@ -74,7 +75,7 @@ export function DatasetCreateButton({ className, variant, ...props }: ContractCr
         }),
       })
 
-      console.log(date)
+      // console.log(date)
 
       if (!response?.ok) {
         setIsLoading(false)
@@ -86,6 +87,8 @@ export function DatasetCreateButton({ className, variant, ...props }: ContractCr
         })
       }
     }
+
+    console.log("Generating data Finished")
 
     setIsLoading(false)
     setNameInput('')
