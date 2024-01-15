@@ -26,11 +26,14 @@ async function deleteContract(postId: string) {
   if (!response?.ok) {
     toast({
       title: 'Something went wrong.',
-      description: 'Your post was not deleted. Please try again.',
+      description: 'Your contract was not deleted. Please try again.',
       variant: 'destructive',
     })
+    return false
   }
-
+  toast({
+    description: 'Your contract has been deleted.',
+  })
   return true
 }
 
@@ -47,10 +50,10 @@ export function ContractOperations({ contract }: ContractOperationsProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-muted">
-         <Icons.ellipsis className="h-4 w-4" />
+          <Icons.ellipsis className="h-4 w-4" />
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="mt-2" align="end" >
+        <DropdownMenuContent className="mt-2" align="end">
           <DropdownMenuItem disabled={!isDigestBlank(contract.digest)}>
             <Link href={`/dashboard/contracts/editor/${contract.id}`} className="flex w-full">
               Edit

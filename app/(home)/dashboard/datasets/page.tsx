@@ -4,6 +4,7 @@ import { DatasetCreateButton } from '@/components/dataset-create-button';
 import { DatasetItem } from '@/components/dataset-item';
 import { EmptyPlaceholder } from '@/components/empty-placeholder';
 import { DashboardShell } from '@/components/shell';
+import { TestingButton } from '@/components/testing-button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { db } from '@/lib/db';
@@ -12,6 +13,9 @@ export const metadata = {
   title: 'Datasets',
 }
 
+// https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-nd-revalidating#fetching-data-on-the-server-with-third-party-libraries
+// https://vercel.com/docs/infrastructure/data-cache
+// https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
 export const revalidate = 0
 
 interface DatasetValue {
@@ -75,30 +79,16 @@ export default async function IndexPage() {
   const distinctNames = await getNames()
   const uniqueDatasetNames = distinctNames.map((item) => item.name)
 
-  // console.log(uniqueDatasetNames.length)
-
-  // {
-  //   xAxis: 'Mon',
-  //   uk: 4000,
-  //   us: 2400,
-  // },
-
-  // Example usage:
   const allData = await getDatasetValuesByTimestamp()
-  // console.log(allData)
-
-  // console.log(a)
-
-  // uniqueDatasetNames.forEach(name => {
-  //   const value = await getAllEntries(name)
-  // });
 
   return (
     <DashboardShell>
       <DashboardHeader heading="Datasets" text="Manage datasets.">
         <DatasetCreateButton />
+        {/* Test Button */}
+        <TestingButton text={'Test'} output1={'Button Clicked!'} output2={allData} output3={undefined}></TestingButton>
       </DashboardHeader>
-      <LineChartEx data={allData} names={uniqueDatasetNames}/>
+      <LineChartEx data={allData} names={uniqueDatasetNames} />
       <div>
         {uniqueDatasetNames?.length ? (
           <ScrollArea className="h-52">
@@ -109,7 +99,7 @@ export default async function IndexPage() {
             </div>
           </ScrollArea>
         ) : (
-          <EmptyPlaceholder className="min-h-[200px]">
+          <EmptyPlaceholder>
             <EmptyPlaceholder.Icon name="data" />
             <EmptyPlaceholder.Title>No datasets created</EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>You don&apos;t have any datasets yet.</EmptyPlaceholder.Description>

@@ -9,7 +9,7 @@ export function EmptyPlaceholder({ className, children, ...props }: EmptyPlaceho
   return (
     <div
       className={cn(
-        'flex min-h-[400px] flex-col items-center justify-center rounded-md border border-dashed p-8 text-center animate-in fade-in-50',
+        'flex flex-col items-center justify-center rounded-md border border-dashed p-4 text-center animate-in fade-in-50',
         className
       )}
       {...props}
@@ -50,5 +50,5 @@ EmptyPlaceholder.Title = function EmptyPlaceholderTitle({ className, ...props }:
 interface EmptyPlacholderDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 EmptyPlaceholder.Description = function EmptyPlaceholderDescription({ className, ...props }: EmptyPlacholderDescriptionProps) {
-  return <p className={cn('mb-8 mt-2 text-center text-sm font-normal leading-6 text-muted-foreground', className)} {...props} />
+  return <p className={cn('mb-4 mt-2 text-center text-sm font-normal leading-6 text-muted-foreground', className)} {...props} />
 }

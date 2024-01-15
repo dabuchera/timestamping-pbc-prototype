@@ -1,7 +1,7 @@
 'use client'
 
 import React, { PureComponent, useState } from 'react';
-import { Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { db } from '@/lib/db';
 
@@ -66,13 +66,14 @@ export default function LineChartEx({ data, names }: LineChartExProps) {
         <Legend />
         <XAxis dataKey="timestamp" stroke="#3d3b3b" fontSize={12} tickLine={false} />
         <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value: number) => `${value}°`} />
+        <CartesianGrid />
       </LineChart>
       <div className="flex flex-row justify-between">
-        <div className='flex items-center'>
+        <div className="flex items-center">
           <h2>Choose Datasets</h2>
         </div>
-        <div className='w-4/5'>
-        <MultiSelect options={options} selected={selected} onChange={setSelected} />
+        <div className="w-4/5">
+          <MultiSelect options={options} selected={selected} onChange={setSelected} />
         </div>
       </div>
     </>
