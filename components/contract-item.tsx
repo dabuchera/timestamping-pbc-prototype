@@ -19,27 +19,6 @@ interface ContractItemProps {
 }
 
 export function ContractItem({ contract }: ContractItemProps) {
-  // const status = getStatus(contract.digest)
-
-  // let testDigest = { digest: 'bdf6bc93bfdaaa44b3753351d10d2be6a59002cedb2809c3ffec62ca700a7df0', result: 1 }
-
-  // const status = getStatus(testDigest)
-
-  console.log('ContractItem')
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     const verifyRes = await handleVerify(testDigest)
-  //   }
-  //   if (!fetchedFirst) {
-  //     fetch()
-  //   }
-  //   const timeout = setTimeout(async () => {
-  //     await fetch()
-  //   }, 60000)
-  //   return () => clearTimeout(timeout)
-  // }, [fetchedFirst])
-
   return (
     <div className="flex items-center justify-between p-4">
       <div className="flex items-center gap-20 w-1/2">

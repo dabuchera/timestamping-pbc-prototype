@@ -32,7 +32,24 @@ async function getContracts() {
 export default async function IndexPage() {
   console.log('IndexPage')
 
-  const contracts = await getContracts()
+  // const contracts = await getContracts()
+  const contracts = await db.contract.findMany({
+    select: {
+      id: true,
+      title: true,
+      digest: true,
+      dataset: true,
+      setPoint: true,
+      deviation: true,
+      penalty: true,
+      checkInterval: true,
+      createdAt: true,
+    },
+    orderBy: {
+      updatedAt: 'desc',
+    },
+  })
+  
   console.log(contracts)
 
   return (
