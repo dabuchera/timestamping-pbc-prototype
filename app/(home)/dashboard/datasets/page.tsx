@@ -83,7 +83,7 @@ export default async function IndexPage() {
 
   // Example usage:
   const allData = await getDatasetValuesByTimestamp()
-  console.log(allData)
+  // console.log(allData)
 
   // console.log(a)
 

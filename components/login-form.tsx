@@ -34,17 +34,6 @@ export function LoginForm() {
 
   const [errorMessage, dispatch] = useFormState(authenticate, undefined)
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    return toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
-  }
-
   return (
     <Form {...form}>
       <form action={dispatch} className="w-1/4 space-y-6">
