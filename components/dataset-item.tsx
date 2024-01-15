@@ -54,7 +54,7 @@ export async function DatasetItem({ name }: DatasetItemProps) {
         </div>
       </div>
       <div className="flex gap-4">
-        test
+        To be discussed
         {/* <ContractStatus contract={{ id: contract.id, digest: contract.digest }} /> */}
       </div>
       <div className="flex gap-4">

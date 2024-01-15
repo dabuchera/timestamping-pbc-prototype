@@ -57,7 +57,14 @@ async function getDatasetValuesByTimestamp() {
   for (const name of uniqueDatasetNames) {
     const entries = await getAllEntries(name)
     for (const entry of entries) {
-      const timestamp = entry.timestamp.toISOString() // Convert timestamp to ISO string
+      // const timestamp = entry.timestamp.toISOString() // Convert timestamp to ISO string
+
+      // Format it as a more human-readable string
+      const formattedDate = entry.timestamp.toLocaleDateString() // Example output: "1/4/2024"
+      const formattedTime = entry.timestamp.toLocaleTimeString() // Example output: "12:00:00 AM"
+
+      // console.log(`${formattedDate} ${formattedTime}`)
+      const timestamp = `${formattedDate} ${formattedTime}`
       const existingEntry = datasetValuesByTimestamp.find((item) => item.timestamp === timestamp)
       if (!existingEntry) {
         const newEntry: {

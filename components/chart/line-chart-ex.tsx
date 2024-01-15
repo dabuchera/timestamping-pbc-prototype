@@ -62,7 +62,7 @@ export default function LineChartEx({ data, names }: LineChartExProps) {
   return (
     <>
       <LineChart data={data} colors={colors} dataKeys={selected}>
-        <Tooltip />
+        <Tooltip labelClassName='text-yellow-500'/>
         <Legend />
         <XAxis dataKey="timestamp" stroke="#3d3b3b" fontSize={12} tickLine={false} />
         <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value: number) => `${value}°`} />
