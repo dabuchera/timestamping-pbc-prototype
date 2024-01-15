@@ -73,7 +73,7 @@ export default async function IndexPage() {
   const distinctNames = await getNames()
   const uniqueDatasetNames = distinctNames.map((item) => item.name)
 
-  console.log(uniqueDatasetNames.length)
+  // console.log(uniqueDatasetNames.length)
 
   // {
   //   xAxis: 'Mon',

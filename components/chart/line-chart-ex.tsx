@@ -67,7 +67,14 @@ export default function LineChartEx({ data, names }: LineChartExProps) {
         <XAxis dataKey="timestamp" stroke="#3d3b3b" fontSize={12} tickLine={false} />
         <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value: number) => `${value}°`} />
       </LineChart>
-      <MultiSelect options={options} selected={selected} onChange={setSelected} className="w-[560px]" />
+      <div className="flex flex-row justify-between">
+        <div className='flex items-center'>
+          <h2>Choose Datasets</h2>
+        </div>
+        <div className='w-4/5'>
+        <MultiSelect options={options} selected={selected} onChange={setSelected} />
+        </div>
+      </div>
     </>
   )
 }
