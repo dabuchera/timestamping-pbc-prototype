@@ -21,6 +21,8 @@ import { contractPatchSchema } from '@/lib/validations/contract';
 // import EditorJS from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { TestingButton } from './testing-button';
+
 // type FormData = z.infer<typeof contractPatchSchema>
 
 export function ContractCreator({ contractId }: { contractId: string }) {
@@ -97,18 +99,7 @@ export function ContractCreator({ contractId }: { contractId: string }) {
             </>
           </Link>
           {/* Test Button */}
-          <button
-            className={cn(buttonVariants())}
-            onClick={() => {
-              // Your onClick logic here
-              console.log('Button Clicked!')
-              console.log('Form Value:', form.getValues())
-              console.log('Form Errors:', form.formState.errors)
-            }}
-          >
-            {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-            <span>Test</span>{' '}
-          </button>
+          <TestingButton text={'Test'} output1={'Button Clicked!'} output2={form.getValues()} output3={form.formState.errors}></TestingButton>
         </div>
       </div>
 

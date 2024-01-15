@@ -3,6 +3,7 @@ import { ContractItem } from '@/components/contract-item';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { EmptyPlaceholder } from '@/components/empty-placeholder';
 import { DashboardShell } from '@/components/shell';
+import { TestingButton } from '@/components/testing-button';
 import { db } from '@/lib/db';
 
 export const metadata = {
@@ -37,6 +38,8 @@ export default async function IndexPage() {
   return (
     <DashboardShell>
       <DashboardHeader heading="Contracts" text="Create and manage contracts.">
+        {/* Test Button */}
+        <TestingButton text={'Test'} output1={'Button Clicked!'} output2={contracts} output3={undefined}></TestingButton>
         <ContractCreateButton />
       </DashboardHeader>
       <div>
