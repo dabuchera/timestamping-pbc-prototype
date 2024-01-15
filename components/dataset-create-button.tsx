@@ -15,10 +15,6 @@ import {
 } from './ui/dialog';
 import { Input } from './ui/input';
 
-const validationSchema = z.object({
-  nameInput: z.string().min(3, { message: 'Name must be at least 3 character' }).max(20, { message: 'Name cannot exceed 20 characters' }),
-});
-
 interface ContractCreateButtonProps extends ButtonProps {}
 
 export function DatasetCreateButton({ className, variant, ...props }: ContractCreateButtonProps) {

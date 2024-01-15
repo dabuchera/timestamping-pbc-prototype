@@ -18,17 +18,12 @@ import {
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { contractPatchSchema } from '@/lib/validations/contract';
-// import EditorJS from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { TestingButton } from './testing-button';
 
-// type FormData = z.infer<typeof contractPatchSchema>
-
 export function ContractCreator({ contractId }: { contractId: string }) {
-  // const { register, handleSubmit } = useForm<FormData>({
-  //   resolver: zodResolver(contractPatchSchema),
-  // })
+  const router = useRouter()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
   // 1. Define your form.
@@ -73,6 +68,7 @@ export function ContractCreator({ contractId }: { contractId: string }) {
     })
 
     setIsSaving(false)
+    router.refresh()
 
     if (!response?.ok) {
       return toast({

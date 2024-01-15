@@ -83,6 +83,7 @@ export function ContractEditor({ contract }: EditorProps) {
     }
 
     setIsSaving(false)
+    router.refresh()
 
     return toast({
       description: 'Your post has been saved.',

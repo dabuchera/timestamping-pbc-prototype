@@ -64,9 +64,6 @@ export function ContractCreateButton({ className, variant, ...props }: ContractC
 
     setIsLoading(false)
 
-    // This forces a cache invalidation.
-    router.refresh()
-
     router.push(`/dashboard/contracts/creator/${generatedCuid}`)
   }
 
