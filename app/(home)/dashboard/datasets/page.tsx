@@ -12,6 +12,11 @@ export const metadata = {
   title: 'Datasets',
 }
 
+interface DatasetValue {
+  timestamp: string
+  [key: string]: any // This allows any additional properties with string keys and any values
+}
+
 async function getNames() {
   return await db.dataset.findMany({
     distinct: ['name'],
@@ -41,7 +46,7 @@ async function getDatasetValuesByTimestamp() {
   const distinctNames = await getNames()
   const uniqueDatasetNames = distinctNames.map((item) => item.name)
 
-  const datasetValuesByTimestamp = []
+  const datasetValuesByTimestamp: DatasetValue[] = []
 
   for (const name of uniqueDatasetNames) {
     const entries = await getAllEntries(name)
@@ -49,7 +54,10 @@ async function getDatasetValuesByTimestamp() {
       const timestamp = entry.timestamp.toISOString() // Convert timestamp to ISO string
       const existingEntry = datasetValuesByTimestamp.find((item) => item.timestamp === timestamp)
       if (!existingEntry) {
-        const newEntry = { timestamp }
+        const newEntry: {
+          timestamp: string
+          [key: string]: any // Allow any additional properties with string keys
+        } = { timestamp }
         newEntry[name] = entry.value
         datasetValuesByTimestamp.push(newEntry)
       } else {
