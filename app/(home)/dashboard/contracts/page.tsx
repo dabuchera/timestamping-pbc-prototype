@@ -32,6 +32,7 @@ export default async function IndexPage() {
   console.log('IndexPage')
 
   const contracts = await getContracts()
+  console.log(contracts)
 
   return (
     <DashboardShell>
