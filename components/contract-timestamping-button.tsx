@@ -85,7 +85,7 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
     router.refresh()
 
     return toast({
-      description: 'Your contract has been saved and timestamping started',
+      description: 'Your contract has been saved and timestamping started.',
     })
   }
 

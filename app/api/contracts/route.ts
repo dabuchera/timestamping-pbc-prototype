@@ -9,7 +9,16 @@ export async function GET() {
       select: {
         id: true,
         title: true,
+        digest: true,
+        dataset: true,
+        setPoint: true,
+        deviation: true,
+        penalty: true,
+        checkInterval: true,
         createdAt: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
       },
     })
 

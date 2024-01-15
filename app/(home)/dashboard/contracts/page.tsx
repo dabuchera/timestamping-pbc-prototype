@@ -1,3 +1,5 @@
+import { cache } from 'react';
+
 import { ContractCreateButton } from '@/components/contract-create-button';
 import { ContractItem } from '@/components/contract-item';
 import { DashboardHeader } from '@/components/dashboard-header';
@@ -9,6 +11,12 @@ import { db } from '@/lib/db';
 export const metadata = {
   title: 'Contracts',
 }
+
+// https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-nd-revalidating#fetching-data-on-the-server-with-third-party-libraries
+// https://vercel.com/docs/infrastructure/data-cache
+// https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+// export const revalidate = 0
+
 
 async function getContracts() {
   return await db.contract.findMany({
@@ -29,28 +37,39 @@ async function getContracts() {
   })
 }
 
+// async function getContracts() {
+//   return await fetch(`/api/contracts`, {
+//     method: 'GET',
+//   })
+// }
+
 export default async function IndexPage() {
   console.log('IndexPage')
 
-  // const contracts = await getContracts()
-  const contracts = await db.contract.findMany({
-    select: {
-      id: true,
-      title: true,
-      digest: true,
-      dataset: true,
-      setPoint: true,
-      deviation: true,
-      penalty: true,
-      checkInterval: true,
-      createdAt: true,
-    },
-    orderBy: {
-      updatedAt: 'desc',
-    },
-  })
-  
-  console.log(contracts)
+  // const response = await fetch(`/api/contracts`, {
+  //   method: 'GET',
+  // })
+  const contracts = await getContracts()
+  // const contracts = cache(async function getContracts() {
+  //   return await db.contract.findMany({
+  //     select: {
+  //       id: true,
+  //       title: true,
+  //       digest: true,
+  //       dataset: true,
+  //       setPoint: true,
+  //       deviation: true,
+  //       penalty: true,
+  //       checkInterval: true,
+  //       createdAt: true,
+  //     },
+  //     orderBy: {
+  //       updatedAt: 'desc',
+  //     },
+  //   })
+  // })
+
+  // console.log(response)
 
   return (
     <DashboardShell>

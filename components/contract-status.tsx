@@ -52,7 +52,7 @@ export function ContractStatus({ contract }: ContractStatusProps) {
       isMounted = false;
       clearInterval(intervalId);
     };
-  }, [contract.digest]);
+  }, [contract.digest, contract.id]);
 
   const renderStatusIcon = () => {
     switch (status) {

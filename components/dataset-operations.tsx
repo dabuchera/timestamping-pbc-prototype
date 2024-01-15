@@ -24,7 +24,11 @@ async function deleteDataset(name: string) {
       description: 'Your dataset was not deleted. Please try again.',
       variant: 'destructive',
     })
+    return false
   }
+  toast({
+    description: 'Your dataset has been deleted.',
+  })
   return true
 }
 

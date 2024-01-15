@@ -12,6 +12,8 @@ export const metadata = {
   title: 'Datasets',
 }
 
+export const revalidate = 0
+
 interface DatasetValue {
   timestamp: string
   [key: string]: any // This allows any additional properties with string keys and any values
@@ -96,7 +98,7 @@ export default async function IndexPage() {
       <DashboardHeader heading="Datasets" text="Manage datasets.">
         <DatasetCreateButton />
       </DashboardHeader>
-      {uniqueDatasetNames.length > 0 ? <LineChartEx data={allData} names={uniqueDatasetNames} /> : <></>}
+      <LineChartEx data={allData} names={uniqueDatasetNames}/>
       <div>
         {uniqueDatasetNames?.length ? (
           <ScrollArea className="h-52">
