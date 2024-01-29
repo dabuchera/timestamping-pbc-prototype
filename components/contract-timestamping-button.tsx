@@ -13,7 +13,10 @@ import { Contract } from '@prisma/client';
 
 interface ContractTimestampingButtonProps extends ButtonProps {
   // Adjust to what needed within the contract class
-  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'dataset' | 'setPoint' | 'deviation' | 'penalty' | 'checkInterval'>
+  contract: Pick<
+    Contract,
+    'id' | 'digest' | 'title' | 'dataset' | 'payoutAddress' | 'checkInterval' | 'reward' | 'setPoint' | 'deviation' | 'threshold' | 'penalty'
+  >
 }
 
 export function ContractTimestampingButton({ contract, className, variant, ...props }: ContractTimestampingButtonProps) {
@@ -39,10 +42,14 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
     let JsonObject: ContractObject = {
       id: contract.id,
       title: contract.title,
+      dataset: contract.dataset,
+      payoutAddress: contract.payoutAddress,
+      checkInterval: contract.checkInterval,
+      reward: contract.reward,
       setPoint: contract.setPoint,
       deviation: contract.deviation,
+      threshold: contract.threshold,
       penalty: contract.penalty,
-      checkInterval: contract.checkInterval,
     }
 
     const processedData = await processJsonObject(JsonObject)
@@ -64,10 +71,13 @@ export function ContractTimestampingButton({ contract, className, variant, ...pr
         // digest is changing here
         digest: res.digests[0].digest,
         dataset: contract.dataset,
+        payoutAddress: contract.payoutAddress,
+        checkInterval: contract.checkInterval,
+        reward: contract.reward,
         setPoint: contract.setPoint,
         deviation: contract.deviation,
+        threshold: contract.threshold,
         penalty: contract.penalty,
-        checkInterval: contract.checkInterval,
       }),
     })
 

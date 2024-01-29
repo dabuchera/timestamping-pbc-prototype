@@ -24,10 +24,13 @@ async function getContracts() {
       title: true,
       digest: true,
       dataset: true,
+      payoutAddress: true,
+      checkInterval: true,
+      reward: true,
       setPoint: true,
       deviation: true,
+      threshold: true,
       penalty: true,
-      checkInterval: true,
       createdAt: true,
     },
     orderBy: {
@@ -35,12 +38,6 @@ async function getContracts() {
     },
   })
 }
-
-// async function getContracts() {
-//   return await fetch(`/api/contracts`, {
-//     method: 'GET',
-//   })
-// }
 
 export default async function IndexPage() {
   const contracts = await getContracts()
@@ -50,13 +47,13 @@ export default async function IndexPage() {
       <DashboardHeader heading="Contracts" text="Create and manage contracts.">
         {/* Test Button */}
         <TestingButton text={'Test'} output1={'Button Clicked!'} output2={contracts} output3={undefined}></TestingButton>
-        <ContractCreateButton />
+        <ContractCreateButton/>
       </DashboardHeader>
       <div>
         {contracts?.length ? (
           <div className="divide-y divide-border rounded-md border">
             {contracts.map((contract) => (
-              <ContractItem key={contract.id} contract={contract} />
+              <ContractItem key={contract.id} contract={contract}/>
             ))}
           </div>
         ) : (
@@ -64,7 +61,7 @@ export default async function IndexPage() {
             <EmptyPlaceholder.Icon name="post" />
             <EmptyPlaceholder.Title>No contracts created</EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>You don&apos;t have any contracts yet.</EmptyPlaceholder.Description>
-            <ContractCreateButton variant="outline" />
+            <ContractCreateButton variant="outline"/>
           </EmptyPlaceholder>
         )}
       </div>

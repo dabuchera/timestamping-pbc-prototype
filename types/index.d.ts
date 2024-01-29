@@ -35,10 +35,14 @@ export type DashboardConfig = {
 export type ContractObject = {
   id: string
   title: string
+  dataset: string
+  payoutAddress: string
+  checkInterval: string
+  reward: number
   setPoint: number
   deviation: number
+  threshold: number
   penalty: number
-  checkInterval: string
 }
 
 // Dcrtime types
@@ -81,33 +85,31 @@ type ChainInformation = {
 
 // Types for https://recharts.org/en-US/
 export type ChartProps = {
-	width?: number | string
-	height?: number | string
-	data: DataType[]
-	colors?: string[]
-	dataKeys: string[]
-	children?: React.ReactNode
+  width?: number | string
+  height?: number | string
+  data: DataType[]
+  colors?: string[]
+  dataKeys: string[]
+  children?: React.ReactNode
 }
 
 export type AreaChartProps = ChartProps & {
-	stack?: boolean
+  stack?: boolean
 }
 
 export type LineChartProps = ChartProps & {}
 export type PieChartProps = Omit<ChartProps, 'data'> & {
-	data: Record<string, string | number>[][]
-	label?: boolean
-	nameKeys: string[]
+  data: Record<string, string | number>[][]
+  label?: boolean
+  nameKeys: string[]
 }
 
 export type BarChartProps = ChartProps & {
-	stack?: boolean
+  stack?: boolean
 }
 export type DefaultDataType = {
-	xAxis?: string
-	yAxis?: string
+  xAxis?: string
+  yAxis?: string
 }
 
 export type DataType = DefaultDataType & Record<string, string | number>
-
-

@@ -23,12 +23,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Contract } from '@prisma/client';
 
 interface EditorProps {
-  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'dataset' | 'setPoint' | 'deviation' | 'penalty' | 'checkInterval'>
+  contract: Pick<
+    Contract,
+    'id' | 'digest' | 'title' | 'dataset' | 'payoutAddress' | 'checkInterval' | 'reward' | 'setPoint' | 'deviation' | 'threshold' | 'penalty'
+  >
+  uniqueDatasetNames: string[]
 }
 
 // type FormData = z.infer<typeof contractPatchSchema>
 
-export function ContractEditor({ contract }: EditorProps) {
+export function ContractEditor({ contract, uniqueDatasetNames }: EditorProps) {
   // const { register, handleSubmit } = useForm<FormData>({
   //   resolver: zodResolver(contractPatchSchema),
   // })
@@ -42,10 +46,13 @@ export function ContractEditor({ contract }: EditorProps) {
       title: contract.title,
       digest: contract.digest,
       dataset: contract.dataset,
+      payoutAddress: contract.payoutAddress,
+      checkInterval: contract.checkInterval,
+      reward: contract.reward,
       setPoint: contract.setPoint,
       deviation: contract.deviation,
+      threshold: contract.threshold,
       penalty: contract.penalty,
-      checkInterval: contract.checkInterval,
     },
   })
 
@@ -67,10 +74,13 @@ export function ContractEditor({ contract }: EditorProps) {
       body: JSON.stringify({
         title: values.title,
         dataset: values.dataset,
+        payoutAddress: values.payoutAddress,
+        checkInterval: values.checkInterval,
+        reward: values.reward,
         setPoint: values.setPoint,
         deviation: values.deviation,
+        threshold: values.threshold,
         penalty: values.penalty,
-        checkInterval: values.checkInterval,
       }),
     })
 
@@ -124,7 +134,7 @@ export function ContractEditor({ contract }: EditorProps) {
                 <span>Save</span>{' '}
               </button>
             </div>
-            <div className="prose prose-stone mx-auto w-full dark:prose-invert grid gap-2">
+            <div className="prose prose-stone mx-auto w-full dark:prose-invert grid grid-cols-2 gap-10">
               <FormField
                 control={form.control}
                 name="title"
@@ -132,7 +142,6 @@ export function ContractEditor({ contract }: EditorProps) {
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
                       <Input placeholder="Title" {...field} disabled={!isDigestBlank(contract.digest)} />
                     </FormControl>
                     <FormDescription>This is the title of your contract.</FormDescription>
@@ -153,11 +162,28 @@ export function ContractEditor({ contract }: EditorProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="one">One</SelectItem>
-                        <SelectItem value="two">Two</SelectItem>
+                        {uniqueDatasetNames.map((value) => (
+                          <SelectItem key={value} value={value}>
+                            {value}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormDescription>This is the used dataset.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="payoutAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Payout Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Payout Address" {...field} disabled={!isDigestBlank(contract.digest)}/>
+                    </FormControl>
+                    <FormDescription>This is the payout address of your contract.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -186,16 +212,38 @@ export function ContractEditor({ contract }: EditorProps) {
               />
               <FormField
                 control={form.control}
+                name="reward"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Reward</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        placeholder="Reward"
+                        {...field}
+                        onChange={(e) => {
+                          e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
+                        }}
+                        disabled={!isDigestBlank(contract.digest)}
+                      />
+                    </FormControl>
+                    <FormDescription>This is the reward used.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="setPoint"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Set Point</FormLabel>
                     <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
                       <Input
                         type="number"
                         min="0"
-                        placeholder="SetPoint"
+                        placeholder="Set Point"
                         {...field}
                         onChange={(e) => {
                           e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
@@ -215,7 +263,6 @@ export function ContractEditor({ contract }: EditorProps) {
                   <FormItem>
                     <FormLabel>Deviation between 0% - 100%</FormLabel>
                     <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
                       <Input
                         type="number"
                         min="0"
@@ -234,12 +281,34 @@ export function ContractEditor({ contract }: EditorProps) {
               />
               <FormField
                 control={form.control}
+                name="threshold"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Threshold between 1% - 50%</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        placeholder="Threshold [%]"
+                        {...field}
+                        onChange={(e) => {
+                          e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
+                        }}
+                        disabled={!isDigestBlank(contract.digest)}
+                      />
+                    </FormControl>
+                    <FormDescription>This is the threshold used.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="penalty"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Penalty per Interval per 5% in $</FormLabel>
+                    <FormLabel>Penalty per Interval</FormLabel>
                     <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
                       <Input
                         type="number"
                         min="0"

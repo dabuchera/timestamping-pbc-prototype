@@ -49,8 +49,8 @@ async function getAllEntries(name: string) {
 }
 
 async function getDatasetValuesByTimestamp() {
-  const distinctNames = await getNames()
-  const uniqueDatasetNames = distinctNames.map((item) => item.name)
+  const distinctDatasets = await getNames()
+  const uniqueDatasetNames = distinctDatasets.map((item) => item.name)
 
   const datasetValuesByTimestamp: DatasetValue[] = []
 

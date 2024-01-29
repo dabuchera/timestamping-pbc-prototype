@@ -56,10 +56,13 @@ export async function PATCH(req: Request, context: z.infer<typeof routeContextSc
         title: body.title,
         digest: body.digest,
         dataset: body.dataset,
+        payoutAddress: body.payoutAddress,
+        checkInterval: body.checkInterval,
+        reward: body.reward,
         setPoint: body.setPoint,
         deviation: body.deviation,
+        threshold: body.threshold,
         penalty: body.penalty,
-        checkInterval: body.checkInterval,
       },
     })
 

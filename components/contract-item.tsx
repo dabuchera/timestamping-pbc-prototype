@@ -15,7 +15,7 @@ import { ContractTimestampingButton } from './contract-timestamping-button';
 import { Icons } from './icons';
 
 interface ContractItemProps {
-  contract: Pick<Contract, 'id' | 'digest' | 'dataset' | 'title' | 'setPoint' | 'deviation' | 'penalty' | 'checkInterval' | 'createdAt'>
+  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'dataset' | 'payoutAddress' | 'checkInterval' | 'reward' | 'setPoint' | 'deviation' | 'threshold' | 'penalty' | 'createdAt'>
 }
 
 export function ContractItem({ contract }: ContractItemProps) {
@@ -41,10 +41,13 @@ export function ContractItem({ contract }: ContractItemProps) {
             title: contract.title,
             digest: contract.digest,
             dataset: contract.dataset,
+            payoutAddress: contract.payoutAddress,
+            checkInterval: contract.checkInterval,
+            reward: contract.reward,
             setPoint: contract.setPoint,
             deviation: contract.deviation,
-            penalty: contract.deviation,
-            checkInterval: contract.checkInterval,
+            threshold: contract.threshold,
+            penalty: contract.penalty,
           }}
           // Button is disabled if contract.digest has a value
           disabled={!isDigestBlank(contract.digest)}

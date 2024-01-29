@@ -22,7 +22,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { TestingButton } from './testing-button';
 
-export function ContractCreator({ contractId }: { contractId: string }) {
+interface CreatorProps {
+  contractId: string
+  uniqueDatasetNames: string[]
+}
+
+export function ContractCreator({ contractId, uniqueDatasetNames }: CreatorProps) {
   const router = useRouter()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
@@ -31,15 +36,22 @@ export function ContractCreator({ contractId }: { contractId: string }) {
     resolver: zodResolver(contractPatchSchema),
     defaultValues: {
       title: '',
-      dataset: 'one',
+      dataset: uniqueDatasetNames.length !== 0 ? uniqueDatasetNames[0] : 'None',
       // Die Fehlermeldung @ts-ignore below sind ok. Da diese Werte zu Beginn Null sind brauchen sie ein empty string um controlled zu werden
+      // @ts-ignore
+      payoutAddress: '',
+      // @ts-ignore
+      checkInterval: 'weekly',
+      // @ts-ignore
+      reward: '',
       // @ts-ignore
       setPoint: '',
       // @ts-ignore
       deviation: '',
       // @ts-ignore
+      threshold: '',
+      // @ts-ignore
       penalty: '',
-      checkInterval: 'weekly',
     },
   })
 
@@ -60,10 +72,13 @@ export function ContractCreator({ contractId }: { contractId: string }) {
         // digest will be set in route.ts
         // digest: "",
         dataset: values.dataset,
+        payoutAddress: values.payoutAddress,
+        checkInterval: values.checkInterval,
+        reward: values.reward,
         setPoint: values.setPoint,
         deviation: values.deviation,
+        threshold: values.threshold,
         penalty: values.penalty,
-        checkInterval: values.checkInterval,
       }),
     })
 
@@ -113,7 +128,7 @@ export function ContractCreator({ contractId }: { contractId: string }) {
                 <span>Save</span>{' '}
               </button>
             </div>
-            <div className="prose prose-stone mx-auto w-full dark:prose-invert grid gap-2">
+            <div className="prose prose-stone mx-auto w-full dark:prose-invert grid grid-cols-2 gap-10">
               <FormField
                 control={form.control}
                 name="title"
@@ -121,7 +136,6 @@ export function ContractCreator({ contractId }: { contractId: string }) {
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
                       <Input placeholder="Title" {...field} />
                     </FormControl>
                     <FormDescription>This is the title of your contract.</FormDescription>
@@ -142,8 +156,11 @@ export function ContractCreator({ contractId }: { contractId: string }) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="one">One</SelectItem>
-                        <SelectItem value="two">Two</SelectItem>
+                        {uniqueDatasetNames.map((value) => (
+                          <SelectItem key={value} value={value}>
+                            {value}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormDescription>This is the used dataset.</FormDescription>
@@ -151,6 +168,21 @@ export function ContractCreator({ contractId }: { contractId: string }) {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="payoutAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Payout Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Payout Address" {...field} />
+                    </FormControl>
+                    <FormDescription>This is the payout address of your contract.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div></div>
               <FormField
                 control={form.control}
                 name="checkInterval"
@@ -175,16 +207,37 @@ export function ContractCreator({ contractId }: { contractId: string }) {
               />
               <FormField
                 control={form.control}
+                name="reward"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Reward</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        placeholder="Reward"
+                        {...field}
+                        onChange={(e) => {
+                          e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>This is the reward used.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="setPoint"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Set Point</FormLabel>
                     <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
                       <Input
                         type="number"
                         min="0"
-                        placeholder="SetPoint"
+                        placeholder="Set Point"
                         {...field}
                         onChange={(e) => {
                           e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
@@ -203,7 +256,6 @@ export function ContractCreator({ contractId }: { contractId: string }) {
                   <FormItem>
                     <FormLabel>Deviation between 0% - 100%</FormLabel>
                     <FormControl>
-                      {/* Set the default value to the current title, if it exists{} */}
                       <Input
                         type="number"
                         min="0"
@@ -221,10 +273,33 @@ export function ContractCreator({ contractId }: { contractId: string }) {
               />
               <FormField
                 control={form.control}
+                name="threshold"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Threshold between 1% - 50%</FormLabel>
+                    <FormControl>
+                      {/* Set the default value to the current title, if it exists{} */}
+                      <Input
+                        type="number"
+                        min="0"
+                        placeholder="Threshold [%]"
+                        {...field}
+                        onChange={(e) => {
+                          e.target.value ? field.onChange(parseFloat(e.target.value)) : field.onChange(e.target.value)
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>This is the threshold used.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="penalty"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Penalty per Interval per 5% in $</FormLabel>
+                    <FormLabel>Penalty per Interval</FormLabel>
                     <FormControl>
                       {/* Set the default value to the current title, if it exists{} */}
                       <Input

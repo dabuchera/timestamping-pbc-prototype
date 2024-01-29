@@ -12,12 +12,24 @@ async function getContractForUser(contractId: Contract['id']) {
   })
 }
 
+async function getNames() {
+  return await db.dataset.findMany({
+    distinct: ['name'],
+    select: {
+      name: true,
+    },
+  })
+}
+
 interface EditorPageProps {
   params: { contractId: string }
 }
 
 export default async function EditorPage({ params }: EditorPageProps) {
   const contract = await getContractForUser(params.contractId)
+
+  const distinctDatasets = await getNames()
+  const uniqueDatasetNames = distinctDatasets.map((item) => item.name)
 
   if (!contract) {
     notFound()
@@ -30,11 +42,15 @@ export default async function EditorPage({ params }: EditorPageProps) {
         title: contract.title,
         digest: contract.digest,
         dataset: contract.dataset,
+        payoutAddress: contract.payoutAddress,
+        checkInterval: contract.checkInterval,
+        reward: contract.reward,
         setPoint: contract.setPoint,
         deviation: contract.deviation,
+        threshold: contract.threshold,
         penalty: contract.penalty,
-        checkInterval: contract.checkInterval,
       }}
+      uniqueDatasetNames={uniqueDatasetNames}
     />
   )
 }

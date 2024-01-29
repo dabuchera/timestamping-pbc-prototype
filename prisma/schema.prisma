@@ -17,14 +17,16 @@ model Contract {
   title         String
   digest        String
   dataset       String
-  setPoint      Float
-  deviation     Float
-  // This is the penalty per 5% per Interval
-  // That means if the datapoints are under or above the deviation
-  // for 5% of the time -> this is the penalty
-  penalty       Float
+  payoutAddress String
   // Here are two options -> Weekly / Monthly
   checkInterval String
+  reward        Float
+  setPoint      Float
+  deviation     Float
+  // This is the threshold so you pay the penalty per Interval
+  threshold     Float
+  // This is the penalty per Interval
+  penalty       Float
   createdAt     DateTime @default(now()) @map(name: "created_at")
   updatedAt     DateTime @default(now()) @map(name: "updated_at")
 
