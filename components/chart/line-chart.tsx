@@ -6,7 +6,7 @@ import { LineChartProps } from '@/types';
 
 import { EmptyPlaceholder } from '../empty-placeholder';
 
-const LineChart = ({ width = '100%', height = 350, data, colors, dataKeys, children }: LineChartProps) => {
+const LineChart = ({ width = '100%', height, data, colors, dataKeys, children }: LineChartProps) => {
   return (
     <ResponsiveContainer width={width} height={height}>
       {dataKeys.length === 0 ? (

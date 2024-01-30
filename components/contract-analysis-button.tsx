@@ -82,7 +82,12 @@ export function ContractAnalysisButton({ contract, datasets, boundaries, classNa
             {/* <DialogDescription>Here you find the summary of the analysis</DialogDescription> */}
           </DialogHeader>
           {/* <Input className="py-4" placeholder="Title" value={nameInput} onChange={(e) => setNameInput(e.target.value)} /> */}
-          <LineChart data={[...datasets, ...boundaries]} colors={colors} dataKeys={[contract.dataset, 'UpperBoundaries', 'LowerBoundaries']}>
+          <LineChart
+            height={250}
+            data={[...datasets, ...boundaries]}
+            colors={colors}
+            dataKeys={[contract.dataset, 'UpperBoundaries', 'LowerBoundaries']}
+          >
             <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('DD-MM-YYYY HH:mm')} labelClassName="text-yellow-500" /> <Legend />
             <XAxis
               type="number"
@@ -178,6 +183,7 @@ export function ContractAnalysisButton({ contract, datasets, boundaries, classNa
 
           <DialogFooter>
             <button
+              onClick={() => setDialogOpen(false)}
               className={cn(
                 buttonVariants({ variant }),
                 {

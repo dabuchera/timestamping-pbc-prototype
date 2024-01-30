@@ -62,7 +62,7 @@ export default function LineChartEx({ data, names }: LineChartExProps) {
 
   return (
     <>
-      <LineChart data={data} colors={colors} dataKeys={selected}>
+      <LineChart height={350} data={data} colors={colors} dataKeys={selected}>
         <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('DD-MM-YYYY HH:mm')} labelClassName="text-yellow-500" /> <Legend />
         <XAxis
           type="number"
