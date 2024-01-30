@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAllEntriesNameUnix } from '@/lib/queries';
-import { filterDataByInterval, findMinMaxTimestamps, formatDate } from '@/lib/utils';
+import { findMinMaxTimestamps, formatDate } from '@/lib/utils';
 import { Contract } from '@prisma/client';
 
 import { ContractAnalysisButton } from './contract-analysis-button';
