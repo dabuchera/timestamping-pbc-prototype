@@ -1,5 +1,6 @@
 'use client'
 
+import moment from 'moment';
 import React, { PureComponent, useState } from 'react';
 import { CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
@@ -13,7 +14,7 @@ import {
 import LineChart from './line-chart';
 
 type Props = {}
-const data = [
+const testData = [
   {
     xAxis: 'Mon',
     uk: 4000,
@@ -21,7 +22,7 @@ const data = [
   },
   {
     xAxis: 'Tue',
-    // uk: 3000,
+    uk: 3000,
     us: 1398,
   },
   {
@@ -62,11 +63,27 @@ export default function LineChartEx({ data, names }: LineChartExProps) {
   return (
     <>
       <LineChart data={data} colors={colors} dataKeys={selected}>
-        <Tooltip labelClassName='text-yellow-500'/>
-        <Legend />
-        <XAxis dataKey="timestamp" stroke="#3d3b3b" fontSize={12} tickLine={false} />
-        <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value: number) => `${value}°`} />
-        <CartesianGrid />
+        <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('DD-MM-YYYY HH:mm')} labelClassName="text-yellow-500" /> <Legend />
+        <XAxis
+          type="number"
+          domain={['dataMin', 'dataMax']}
+          dataKey="timestamp"
+          stroke="#3d3b3b"
+          fontSize={12}
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={(unixTime) => moment(unixTime).format('DD-MM-YY')}
+        />
+        <YAxis
+          type="number"
+          domain={['dataMin', 'dataMax']}
+          stroke="#888888"
+          fontSize={12}
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={(value: number) => `${value}°`}
+        />
+        <CartesianGrid strokeDasharray="3 3" />
       </LineChart>
       <div className="flex flex-row justify-between">
         <div className="flex items-center">

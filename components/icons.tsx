@@ -1,8 +1,9 @@
 import {
     AlarmClockCheck, AlertTriangle, ArrowRight, Calculator, Check, ChevronLeft, ChevronRight,
     Command, CreditCard, Database, File, FileCog, FileText, FlaskConical, HelpCircle, Hourglass,
-    Image, Info, Laptop, LayoutTemplate, LineChart, Loader, Loader2, Moon, MoreVertical, Pizza,
-    Plus, Save, Settings, SunMedium, Timer, TimerOff, Trash, Twitter, User, X, XOctagon
+    Image, Info, KanbanSquareDashed, Laptop, LayoutTemplate, LineChart, Loader, Loader2, Moon,
+    MoreVertical, Pizza, Plus, Save, Settings, SunMedium, Timer, TimerOff, Trash, Twitter, User, X,
+    XOctagon
 } from 'lucide-react';
 
 export const Icons = {
@@ -46,4 +47,7 @@ export const Icons = {
   // Timestamping info
   timestamped: Timer,
   nottimestamped: TimerOff,
+  // Results
+  analysis : KanbanSquareDashed
+
 }

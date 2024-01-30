@@ -181,7 +181,7 @@ export function ContractEditor({ contract, uniqueDatasetNames }: EditorProps) {
                   <FormItem>
                     <FormLabel>Payout Address</FormLabel>
                     <FormControl>
-                      <Input placeholder="Payout Address" {...field} disabled={!isDigestBlank(contract.digest)}/>
+                      <Input placeholder="Payout Address" {...field} disabled={!isDigestBlank(contract.digest)} />
                     </FormControl>
                     <FormDescription>This is the payout address of your contract.</FormDescription>
                     <FormMessage />
@@ -201,8 +201,10 @@ export function ContractEditor({ contract, uniqueDatasetNames }: EditorProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="weekly">Weekly Interval</SelectItem>
-                        <SelectItem value="monthly">Monthly Interval</SelectItem>
+                        <SelectItem value="1d">Daily Interval</SelectItem>
+                        <SelectItem value="2d">Bi-Daily Interval</SelectItem>
+                        <SelectItem value="3d">Tri-Daily Interval</SelectItem>
+                        <SelectItem value="7d">Weekly Interval</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>This is the used checking Interval.</FormDescription>

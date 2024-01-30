@@ -47,7 +47,7 @@ export default async function IndexPage() {
       <DashboardHeader heading="Contracts" text="Create and manage contracts.">
         {/* Test Button */}
         <TestingButton text={'Test'} output1={'Button Clicked!'} output2={contracts} output3={undefined}></TestingButton>
-        <ContractCreateButton/>
+        <ContractCreateButton disabled={true}/>
       </DashboardHeader>
       <div>
         {contracts?.length ? (
@@ -61,7 +61,7 @@ export default async function IndexPage() {
             <EmptyPlaceholder.Icon name="post" />
             <EmptyPlaceholder.Title>No contracts created</EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>You don&apos;t have any contracts yet.</EmptyPlaceholder.Description>
-            <ContractCreateButton variant="outline"/>
+            <ContractCreateButton variant="outline" disabled={true}/>
           </EmptyPlaceholder>
         )}
       </div>

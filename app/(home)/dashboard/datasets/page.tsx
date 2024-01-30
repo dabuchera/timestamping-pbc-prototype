@@ -19,7 +19,8 @@ export const metadata = {
 export const revalidate = 0
 
 interface DatasetValue {
-  timestamp: string
+  // timestamp: string
+  timestamp: number
   [key: string]: any // This allows any additional properties with string keys and any values
 }
 
@@ -48,7 +49,7 @@ async function getAllEntries(name: string) {
   })
 }
 
-async function getDatasetValuesByTimestamp() {
+/* async function getDatasetValuesByTimestamp() {
   const distinctDatasets = await getNames()
   const uniqueDatasetNames = distinctDatasets.map((item) => item.name)
 
@@ -80,6 +81,34 @@ async function getDatasetValuesByTimestamp() {
   }
 
   return datasetValuesByTimestamp
+} */
+
+async function getDatasetValuesByTimestamp() {
+  const distinctDatasets = await getNames();
+  const uniqueDatasetNames = distinctDatasets.map((item) => item.name);
+
+  const datasetValuesByTimestamp : DatasetValue[] = []
+
+  for (const name of uniqueDatasetNames) {
+    const entries = await getAllEntries(name);
+    for (const entry of entries) {
+      // Use the getTime() method to get the Unix timestamp in milliseconds
+      const timestamp = entry.timestamp.getTime(); // Unix timestamp in milliseconds
+
+      const existingEntry = datasetValuesByTimestamp.find((item) => item.timestamp === timestamp);
+      if (!existingEntry) {
+        const newEntry = {
+          timestamp,
+          [name]: entry.value,
+        };
+        datasetValuesByTimestamp.push(newEntry);
+      } else {
+        existingEntry[name] = entry.value;
+      }
+    }
+  }
+
+  return datasetValuesByTimestamp;
 }
 
 export default async function IndexPage() {
@@ -93,7 +122,7 @@ export default async function IndexPage() {
       <DashboardHeader heading="Datasets" text="Manage datasets.">
         {/* Test Button */}
         <TestingButton text={'Test'} output1={'Button Clicked!'} output2={allData} output3={undefined}></TestingButton>
-        <DatasetCreateButton />
+        <DatasetCreateButton disabled={true} />
       </DashboardHeader>
       <LineChartEx data={allData} names={uniqueDatasetNames} />
       <div>

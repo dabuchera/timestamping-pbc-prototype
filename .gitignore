@@ -38,3 +38,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# JSON File
+NEST_0412_1012.json
+NEST_1112_1712.json
+NEST_0412_1012_cleaned.json
+NEST_1112_1712_cleaned.json

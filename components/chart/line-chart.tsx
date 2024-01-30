@@ -21,8 +21,10 @@ const LineChart = ({ width = '100%', height = 350, data, colors, dataKeys, child
           {dataKeys.map((dkey, index) => (
             <Line
               key={index}
+              // type="monotone"
               type="monotone"
               dataKey={dkey}
+              dot={false}
               stroke={colors ? colors[index] : 'black'}
               strokeWidth={2}
               fillOpacity={1}
