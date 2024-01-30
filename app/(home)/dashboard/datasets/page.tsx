@@ -33,7 +33,7 @@ export default async function IndexPage() {
     <DashboardShell>
       <DashboardHeader heading="Datasets" text="Manage datasets.">
         {/* Test Button */}
-        <TestingButton text={'Test'} output1={'Button Clicked!'} output2={allData} output3={undefined}></TestingButton>
+        {/* <TestingButton text={'Test'} output1={'Button Clicked!'} output2={allData} output3={undefined}></TestingButton> */}
         <DatasetCreateButton disabled={true} />
       </DashboardHeader>
       <LineChartEx data={allData} names={uniqueDatasetNames} />

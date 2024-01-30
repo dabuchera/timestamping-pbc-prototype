@@ -25,7 +25,7 @@ export default async function IndexPage() {
     <DashboardShell>
       <DashboardHeader heading="Contracts" text="Create and manage contracts.">
         {/* Test Button */}
-        <TestingButton text={'Test'} output1={'Button Clicked!'} output2={contracts} output3={undefined}></TestingButton>
+        {/* <TestingButton text={'Test'} output1={'Button Clicked!'} output2={contracts} output3={undefined}></TestingButton> */}
         <ContractCreateButton disabled={true}/>
       </DashboardHeader>
       <div>

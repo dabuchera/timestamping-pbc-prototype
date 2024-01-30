@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge';
 import { digestPayload } from '@/lib/dcrtime';
 import { ContractObject, Digest, InputData } from '@/types';
 
-import { DatasetEntry, getAllEntriesWithName } from './queries';
+import { DatasetEntry, DatasetValue, getAllEntriesWithName } from './queries';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -122,13 +122,14 @@ export function findMinMaxTimestamps(data: DatasetValue[]) {
   return { minTimestamp, maxTimestamp }
 }
 
-interface DatasetValue {
-  // timestamp: string
-  timestamp: number
-  [key: string]: any // This allows any additional properties with string keys and any values
+export interface Results {
+  violationsAbovePercentage: number
+  violationsBelowPercentage: number
+  finalPenalty: number
+  finalPayout: number
 }
 
-export async function analyze(
+export function analyze(
   datasets: DatasetValue[],
   datasetName: string,
   checkInterval: string,
@@ -137,7 +138,7 @@ export async function analyze(
   deviation: number,
   threshold: number,
   penalty: number
-) {
+): Results {
   // console.log(datasets)
 
   let violationsAbove: DatasetValue[] = new Array()
@@ -162,4 +163,17 @@ export async function analyze(
 
   console.log(violationsAbove)
   console.log(violationsBelow)
+
+  const violationsAbovePercentage = Number((violationsAbove.length / datasets.length).toFixed(3)) * 100
+  const violationsBelowPercentage = Number((violationsBelow.length / datasets.length).toFixed(3)) * 100
+
+  let finalPenalty = 0
+  let finalPayout = reward
+
+  if (violationsAbovePercentage > threshold || violationsBelowPercentage > threshold) {
+    finalPenalty = penalty
+    finalPayout = reward - finalPenalty
+  }
+
+  return { violationsAbovePercentage, violationsBelowPercentage, finalPenalty, finalPayout }
 }

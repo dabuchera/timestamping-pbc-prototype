@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { getAllEntriesNameUnix } from '@/lib/queries';
-import { findMinMaxTimestamps, formatDate } from '@/lib/utils';
+import { filterDataByInterval, findMinMaxTimestamps, formatDate } from '@/lib/utils';
 import { Contract } from '@prisma/client';
 
 import { ContractAnalysisButton } from './contract-analysis-button';
@@ -28,15 +28,15 @@ export async function ResultContractItem({ contract }: ContractItemProps) {
   const datasets = await getAllEntriesNameUnix(contract.dataset)
 
   const timestamps = findMinMaxTimestamps(datasets)
-  console.log('Min Timestamp:', timestamps.minTimestamp)
+  // console.log('Min Timestamp:', timestamps.minTimestamp)
 
   const boundaries = [
     {
-      Upperboundaries: contract.setPoint * (1 + contract.deviation / 100),
+      UpperBoundaries: contract.setPoint * (1 + contract.deviation / 100),
       timestamp: timestamps.minTimestamp,
     },
     {
-      Upperboundaries: contract.setPoint * (1 + contract.deviation / 100),
+      UpperBoundaries: contract.setPoint * (1 + contract.deviation / 100),
       timestamp: timestamps.maxTimestamp,
     },
     {

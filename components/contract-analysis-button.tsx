@@ -2,21 +2,19 @@
 
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
+import { QRCodeSVG } from 'qrcode.react';
 import * as React from 'react';
 import { CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { Icons } from '@/components/icons';
 import { ButtonProps, buttonVariants } from '@/components/ui/button';
-import { toast } from '@/components/ui/use-toast';
-import { handleTimestamp } from '@/lib/dcrtime';
-import { DatasetEntry, DatasetValue } from '@/lib/queries';
-import { analyze, cn, findMinMaxTimestamps, processJsonObject } from '@/lib/utils';
-import { ContractObject } from '@/types';
+import { DatasetValue } from '@/lib/queries';
+import { analyze, cn, Results } from '@/lib/utils';
 import { Contract } from '@prisma/client';
 
 import LineChart from './chart/line-chart';
 import {
-    Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle
+    Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle
 } from './ui/dialog';
 
 interface ContractAnalysisButtonProps extends ButtonProps {
@@ -32,82 +30,32 @@ interface ContractAnalysisButtonProps extends ButtonProps {
 const colors = ['#7f7f7f', '#ad1714', '#5a45bd']
 
 export function ContractAnalysisButton({ contract, datasets, boundaries, className, variant, ...props }: ContractAnalysisButtonProps) {
-  const router = useRouter()
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false)
-
-  // "Upperboundaries", "LowerBoundaries"]}>
+  const [results, setResults] = React.useState<Results>()
 
   async function onClick() {
     setIsLoading(true)
 
-    setDialogOpen(true)
-
-    let JsonObject: ContractObject = {
-      id: contract.id,
-      title: contract.title,
-      dataset: contract.dataset,
-      payoutAddress: contract.payoutAddress,
-      checkInterval: contract.checkInterval,
-      reward: contract.reward,
-      setPoint: contract.setPoint,
-      deviation: contract.deviation,
-      threshold: contract.threshold,
-      penalty: contract.penalty,
-    }
-
-    const results = await analyze(
-      datasets,
-      contract.dataset,
-      contract.checkInterval,
-      contract.setPoint,
-      contract.reward,
-      contract.deviation,
-      contract.threshold,
-      contract.penalty
+    setResults(
+      analyze(
+        datasets,
+        contract.dataset,
+        contract.checkInterval,
+        contract.setPoint,
+        contract.reward,
+        contract.deviation,
+        contract.threshold,
+        contract.penalty
+      )
     )
 
     console.log('Resultat handleTimestamp:')
     console.log(results)
 
-    // Update digest
-    // const response = await fetch(`/api/contracts/${contract.id}`, {
-    //   method: 'PATCH',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     id: contract.id,
-    //     title: contract.title,
-    //     // digest is changing here
-    //     digest: res.digests[0].digest,
-    //     dataset: contract.dataset,
-    //     payoutAddress: contract.payoutAddress,
-    //     checkInterval: contract.checkInterval,
-    //     reward: contract.reward,
-    //     setPoint: contract.setPoint,
-    //     deviation: contract.deviation,
-    //     threshold: contract.threshold,
-    //     penalty: contract.penalty,
-    //   }),
-    // })
-
     setIsLoading(false)
 
-    // if (!response?.ok) {
-    //   return toast({
-    //     title: 'Something went wrong.',
-    //     description: 'Your contract was not saved. Please try again.',
-    //     variant: 'destructive',
-    //   })
-    // }
-
-    // This forces a cache invalidation.
-    // router.refresh()
-
-    // return toast({
-    //   description: 'Your contract has been saved and timestamping started.',
-    // })
+    setDialogOpen(true)
   }
 
   return (
@@ -125,19 +73,16 @@ export function ContractAnalysisButton({ contract, datasets, boundaries, classNa
         {...props}
       >
         {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : <Icons.analysis className="mr-2 h-4 w-4" />}
-        {isLoading ? 'Running' : 'Starting'}
+        Show Analysis
       </button>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-[750px]">
           <DialogHeader>
-            <DialogTitle>Create Dataset</DialogTitle>
-            <DialogDescription>
-              Currently, you will generate an interval of{' '}
-              {/* {increment === 60_000 ? '1 minute' : increment === 3_600_000 ? '1 hour' : increment === 86_400_000 ? '1 day' : ''}. */}
-            </DialogDescription>
+            <DialogTitle>Results</DialogTitle>
+            {/* <DialogDescription>Here you find the summary of the analysis</DialogDescription> */}
           </DialogHeader>
           {/* <Input className="py-4" placeholder="Title" value={nameInput} onChange={(e) => setNameInput(e.target.value)} /> */}
-          <LineChart data={ [...datasets, ...boundaries]} colors={colors} dataKeys={[contract.dataset, 'Upperboundaries', 'LowerBoundaries']}>
+          <LineChart data={[...datasets, ...boundaries]} colors={colors} dataKeys={[contract.dataset, 'UpperBoundaries', 'LowerBoundaries']}>
             <Tooltip labelFormatter={(unixTime) => moment(unixTime).format('DD-MM-YYYY HH:mm')} labelClassName="text-yellow-500" /> <Legend />
             <XAxis
               type="number"
@@ -161,6 +106,76 @@ export function ContractAnalysisButton({ contract, datasets, boundaries, classNa
             <CartesianGrid strokeDasharray="3 3" />
           </LineChart>
 
+          <hr />
+
+          <h2 className="font-semibold">Summary</h2>
+          <div className="grid gap-x-10 gap-y-3 grid-cols-3">
+            <div>Check Interval: {contract.checkInterval}</div>
+            <div>Allowed Deviation {contract.deviation}%</div>
+            <div>Threshold: {contract.threshold}%</div>
+            <div>Set Point: {contract.setPoint}°</div>
+            <div>Reward: {contract.reward}$</div>
+            <div>Penalty: {contract.penalty}$</div>
+          </div>
+
+          <hr />
+
+          <h2 className="font-semibold">Violations</h2>
+          <div className="grid grid-flow-row-dense grid-cols-3 grid-rows-2 gap-x-10 gap-y-3">
+            <div className="col-span-2">Percentage of Datapoints above your deviation</div>
+            <div
+              className={
+                results?.violationsAbovePercentage
+                  ? results.violationsAbovePercentage < contract.threshold
+                    ? 'text-green-700'
+                    : 'text-red-700'
+                  : 'text-white'
+              }
+            >
+              {results?.violationsAbovePercentage}%
+            </div>
+            <div className="col-span-2">Percentage of Datapoints below your deviation</div>
+            <div
+              className={
+                results?.violationsBelowPercentage
+                  ? results.violationsBelowPercentage < contract.threshold
+                    ? 'text-green-700'
+                    : 'text-red-700'
+                  : 'text-white'
+              }
+            >
+              {results?.violationsBelowPercentage}%
+            </div>
+          </div>
+
+          <hr />
+
+          <div className="grid grid-cols-2">
+            <h2 className="font-semibold">Payouts</h2>
+            {results?.finalPenalty == 0 ? (
+              <div className="text-green-700 font-semibold">No Penalty applied</div>
+            ) : (
+              <div className="text-red-700 font-semibold">Penalty applied</div>
+            )}
+          </div>
+          <div className="grid grid-flow-row-dense grid-cols-4 grid-rows-3 gap-x-10 gap-y-3">
+            <div className="row-span-3">
+              <QRCodeSVG
+                size={125} // Set the size of the QR code
+                bgColor={'#ffffff'}
+                fgColor={'#000000'}
+                includeMargin={false}
+                value={`https://mempool.space/address/${contract.payoutAddress}`}
+              />
+            </div>
+            <div className="col-span-3">
+              Eligible payout is {results?.finalPayout}$ and can be transferred to{' '}
+              {contract.payoutAddress.substring(0, 4) + '...' + contract.payoutAddress.substring(contract.payoutAddress.length - 4)}
+            </div>
+            <div className="col-span-3">Check QR-Code</div>
+            <div className="col-span-3">Necessary Signatures for Transfer from Multi-Sig (2/2)</div>
+          </div>
+
           <DialogFooter>
             <button
               className={cn(
@@ -173,8 +188,8 @@ export function ContractAnalysisButton({ contract, datasets, boundaries, classNa
               disabled={isLoading}
               {...props}
             >
-              {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : <Icons.save className="mr-2 h-4 w-4" />}
-              Save
+              {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : <Icons.check className="mr-2 h-4 w-4" />}
+              Close
             </button>
           </DialogFooter>
         </DialogContent>
