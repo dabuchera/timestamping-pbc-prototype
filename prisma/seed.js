@@ -20,8 +20,9 @@ function createNESTRecord(record, name) {
   // Parse the timestamp using the Date constructor
   const dateObject = new Date(record.timestamp)
 
+  // This is not used. It is "wrong in the database but for the platform it works"
   // Add one hour to the timestamp
-  dateObject.setHours(dateObject.getHours() + 1)
+  // dateObject.setHours(dateObject.getHours() + 1)
 
   return {
     name: name,

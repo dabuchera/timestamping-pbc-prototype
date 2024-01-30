@@ -7,6 +7,7 @@ import { EmptyPlaceholder } from '@/components/empty-placeholder';
 import { DashboardShell } from '@/components/shell';
 import { TestingButton } from '@/components/testing-button';
 import { db } from '@/lib/db';
+import { getContracts } from '@/lib/queries';
 
 export const metadata = {
   title: 'Contracts',
@@ -16,28 +17,6 @@ export const metadata = {
 // https://vercel.com/docs/infrastructure/data-cache
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
 export const revalidate = 0
-
-async function getContracts() {
-  return await db.contract.findMany({
-    select: {
-      id: true,
-      title: true,
-      digest: true,
-      dataset: true,
-      payoutAddress: true,
-      checkInterval: true,
-      reward: true,
-      setPoint: true,
-      deviation: true,
-      threshold: true,
-      penalty: true,
-      createdAt: true,
-    },
-    orderBy: {
-      updatedAt: 'desc',
-    },
-  })
-}
 
 export default async function IndexPage() {
   const contracts = await getContracts()

@@ -3,31 +3,10 @@ import { EmptyPlaceholder } from '@/components/empty-placeholder';
 import { ResultContractItem } from '@/components/result-contract-item';
 import { DashboardShell } from '@/components/shell';
 import { db } from '@/lib/db';
+import { getContracts } from '@/lib/queries';
 
 export const metadata = {
   title: 'Results',
-}
-
-async function getContracts() {
-  return await db.contract.findMany({
-    select: {
-      id: true,
-      title: true,
-      digest: true,
-      dataset: true,
-      payoutAddress: true,
-      checkInterval: true,
-      reward: true,
-      setPoint: true,
-      deviation: true,
-      threshold: true,
-      penalty: true,
-      createdAt: true,
-    },
-    orderBy: {
-      updatedAt: 'desc',
-    },
-  })
 }
 
 export default async function IndexPage() {
@@ -36,7 +15,6 @@ export default async function IndexPage() {
   return (
     <DashboardShell>
       <DashboardHeader heading="Results" text="This one shows the results.">
-        {/* <ContractCreateButton /> */}
       </DashboardHeader>
       <div>
         {contracts?.length ? (

@@ -1,17 +1,9 @@
 import { ContractCreator } from '@/components/contract-creator';
 import { db } from '@/lib/db';
+import { getNames } from '@/lib/queries';
 
 interface EditorPageProps {
   params: { contractId: string }
-}
-
-async function getNames() {
-  return await db.dataset.findMany({
-    distinct: ['name'],
-    select: {
-      name: true,
-    },
-  })
 }
 
 export default async function CreatorPage({ params }: EditorPageProps) {

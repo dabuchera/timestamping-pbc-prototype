@@ -5,6 +5,8 @@ import { twMerge } from 'tailwind-merge';
 import { digestPayload } from '@/lib/dcrtime';
 import { ContractObject, Digest, InputData } from '@/types';
 
+import { DatasetEntry, getAllEntriesWithName } from './queries';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -95,4 +97,69 @@ export function getStatus(digest: Digest): string {
     return 'Pending'
   }
   return 'Not Found'
+}
+
+export function findMinMaxTimestamps(data: DatasetValue[]) {
+  if (data.length === 0) {
+    return { minTimestamp: 100, maxTimestamp: 100 } // Return fake number or handle the case where the array is empty
+  }
+
+  let minTimestamp = data[0].timestamp
+  let maxTimestamp = data[0].timestamp
+
+  for (const entry of data) {
+    const timestamp = entry.timestamp
+
+    if (timestamp < minTimestamp) {
+      minTimestamp = timestamp
+    }
+
+    if (timestamp > maxTimestamp) {
+      maxTimestamp = timestamp
+    }
+  }
+
+  return { minTimestamp, maxTimestamp }
+}
+
+interface DatasetValue {
+  // timestamp: string
+  timestamp: number
+  [key: string]: any // This allows any additional properties with string keys and any values
+}
+
+export async function analyze(
+  datasets: DatasetValue[],
+  datasetName: string,
+  checkInterval: string,
+  setPoint: number,
+  reward: number,
+  deviation: number,
+  threshold: number,
+  penalty: number
+) {
+  // console.log(datasets)
+
+  let violationsAbove: DatasetValue[] = new Array()
+  let violationsBelow: DatasetValue[] = new Array()
+
+  console.log(setPoint)
+  console.log(deviation)
+  console.log(1 + deviation / 100)
+
+  console.log(datasets)
+
+  for (let index = 0; index < datasets.length; index++) {
+    const element = datasets[index]
+    const datasetValue = element[datasetName]
+    if (datasetValue > setPoint * (1 + deviation / 100)) {
+      violationsAbove.push(element)
+    }
+    if (datasetValue < setPoint * (1 - deviation / 100)) {
+      violationsBelow.push(element)
+    }
+  }
+
+  console.log(violationsAbove)
+  console.log(violationsBelow)
 }

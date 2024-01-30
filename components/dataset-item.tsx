@@ -2,24 +2,10 @@ import Link from 'next/link';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { db } from '@/lib/db';
+import { getMinMaxTimestamp } from '@/lib/queries';
 import { formatDate } from '@/lib/utils';
 
 import { DatasetOperations } from './dataset-operations';
-
-// get Min and Max for all entries with this name
-async function getMinMaxTimestamp(name: string) {
-  return await db.dataset.aggregate({
-    where: {
-      name: name,
-    },
-    _min: {
-      timestamp: true,
-    },
-    _max: {
-      timestamp: true,
-    },
-  })
-}
 
 interface DatasetItemProps {
   name: string
@@ -41,9 +27,7 @@ export async function DatasetItem({ name }: DatasetItemProps) {
       {/* <Checkbox onChange={handleCheckboxChange}/> */}
       <div className="flex items-center gap-20 w-1/2">
         <div className="grid gap-1">
-          <Link href={`/dashboard/contracts/editor`} className="font-semibold hover:underline">
-            {name}
-          </Link>
+          {name}
           <div>
             {
               <p className="text-sm text-muted-foreground">

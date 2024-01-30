@@ -2,21 +2,13 @@ import { notFound } from 'next/navigation';
 
 import { ContractEditor } from '@/components/contract-editor';
 import { db } from '@/lib/db';
+import { getNames } from '@/lib/queries';
 import { Contract } from '@prisma/client';
 
 async function getContractForUser(contractId: Contract['id']) {
   return await db.contract.findFirst({
     where: {
       id: contractId,
-    },
-  })
-}
-
-async function getNames() {
-  return await db.dataset.findMany({
-    distinct: ['name'],
-    select: {
-      name: true,
     },
   })
 }

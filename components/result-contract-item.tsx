@@ -1,88 +1,60 @@
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-
-import { ContractOperations } from '@/components/contract-operations';
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-    handleVerify, isDigestAnchored, isDigestAnchorPending, isDigestWaitingAnchoring
-} from '@/helpers/dcrtime';
-import { db } from '@/lib/db';
-import { cn, formatDate, getStatus, isDigestBlank } from '@/lib/utils';
-import { Digest } from '@/types';
+import { getAllEntriesNameUnix } from '@/lib/queries';
+import { findMinMaxTimestamps, formatDate } from '@/lib/utils';
 import { Contract } from '@prisma/client';
 
 import { ContractAnalysisButton } from './contract-analysis-button';
 import { ContractStatus } from './contract-status';
-import { Icons } from './icons';
 
 interface ContractItemProps {
-  contract: Pick<Contract, 'id' | 'digest' | 'title' | 'dataset' | 'payoutAddress' | 'checkInterval' | 'reward' | 'setPoint' | 'deviation' | 'threshold' | 'penalty' | 'createdAt'>
-}
-
-interface DatasetValue {
-  timestamp: string
-  [key: string]: any // This allows any additional properties with string keys and any values
-}
-
-// get all entries with this name
-async function getAllEntries(name: string) {
-  return await db.dataset.findMany({
-    where: {
-      name: name,
-    },
-    orderBy: {
-      timestamp: 'asc', // Order by timestamp in ascending order
-    },
-    select: {
-      timestamp: true,
-      value: true,
-    },
-  })
-}
-
-async function getDatasetValuesByTimestamp(name: string) {
-
-  const datasetValuesByTimestamp: DatasetValue[] = []
-    const entries = await getAllEntries(name)
-    for (const entry of entries) {
-      // const timestamp = entry.timestamp.toISOString() // Convert timestamp to ISO string
-
-      // Format it as a more human-readable string
-      const formattedDate = entry.timestamp.toLocaleDateString() // Example output: "1/4/2024"
-      const formattedTime = entry.timestamp.toLocaleTimeString() // Example output: "12:00:00 AM"
-
-      // console.log(`${formattedDate} ${formattedTime}`)
-      const timestamp = `${formattedDate} ${formattedTime}`
-      const existingEntry = datasetValuesByTimestamp.find((item) => item.timestamp === timestamp)
-      if (!existingEntry) {
-        const newEntry: {
-          timestamp: string
-          [key: string]: any // Allow any additional properties with string keys
-        } = { timestamp }
-        newEntry[name] = entry.value
-        datasetValuesByTimestamp.push(newEntry)
-      } else {
-        existingEntry[name] = entry.value
-      }
-    }
-
-  return datasetValuesByTimestamp
+  contract: Pick<
+    Contract,
+    | 'id'
+    | 'digest'
+    | 'title'
+    | 'dataset'
+    | 'payoutAddress'
+    | 'checkInterval'
+    | 'reward'
+    | 'setPoint'
+    | 'deviation'
+    | 'threshold'
+    | 'penalty'
+    | 'createdAt'
+  >
 }
 
 export async function ResultContractItem({ contract }: ContractItemProps) {
+  const datasets = await getAllEntriesNameUnix(contract.dataset)
 
-  // const allData = await getDatasetValuesByTimestamp(contract.dataset)
-  const allData = await getAllEntries(contract.dataset)
+  const timestamps = findMinMaxTimestamps(datasets)
+  console.log('Min Timestamp:', timestamps.minTimestamp)
 
-  console.log(allData)
+  const boundaries = [
+    {
+      Upperboundaries: contract.setPoint * (1 + contract.deviation / 100),
+      timestamp: timestamps.minTimestamp,
+    },
+    {
+      Upperboundaries: contract.setPoint * (1 + contract.deviation / 100),
+      timestamp: timestamps.maxTimestamp,
+    },
+    {
+      LowerBoundaries: contract.setPoint * (1 - contract.deviation / 100),
+      timestamp: timestamps.minTimestamp,
+    },
+    {
+      LowerBoundaries: contract.setPoint * (1 - contract.deviation / 100),
+      timestamp: timestamps.maxTimestamp,
+    },
+  ]
 
   return (
     <div className="flex items-center justify-between p-4">
       <div className="flex items-center gap-20 w-1/2">
         <div className="grid gap-1">
-          <Link href={`/dashboard/contracts/editor/${contract.id}`} className="font-semibold hover:underline">
-            {contract.title}
-          </Link>
+          {contract.title}
+
           <div>
             <p className="text-sm text-muted-foreground">{formatDate(contract.createdAt?.toDateString())}</p>
           </div>
@@ -106,6 +78,8 @@ export async function ResultContractItem({ contract }: ContractItemProps) {
             threshold: contract.threshold,
             penalty: contract.penalty,
           }}
+          datasets={datasets}
+          boundaries={boundaries}
           // Button is disabled if contract.digest has no value e.g., not timestamped
           // disabled={isDigestBlank(contract.digest)}
         />
